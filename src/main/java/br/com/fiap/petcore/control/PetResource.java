@@ -1,6 +1,9 @@
 package br.com.fiap.petcore.control;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import br.com.fiap.petcore.service.procedure.ProcedurePetService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -32,24 +35,54 @@ public class PetResource {
 
     @Autowired
     private PetService petService;
+    
+    @Autowired
+    private ProcedurePetService procedurePetService;
 
     @Autowired
     private TutorService tutorService;
 
-    @GetMapping("/pet/listar")
-    public ModelAndView listarPets(Authentication authentication) {
-        ModelAndView mv = new ModelAndView("/pet/listar");
-        boolean tutor = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_TUTOR"));
-        if (tutor) {
-            var tutorLogado = tutorService.fetchByEmail(authentication.getName());
-            mv.addObject("pets", tutorLogado.isPresent() ? new ArrayList<>(tutorLogado.get().getPets()) : new ArrayList<>());
-        } else {
-            mv.addObject("pets", petService.fetchAll(Pageable.unpaged()).getContent());
-        }
-        mv.addObject("tutor", tutor);
 
-        return mv;
+@GetMapping("/pet/listar")
+public ModelAndView listarPets(Authentication authentication) {
+    ModelAndView mv = new ModelAndView("/pet/listar");
+
+    boolean tutor = authentication.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_TUTOR"));
+
+    if (tutor) {
+        var tutorLogado = tutorService.fetchByEmail(authentication.getName());
+
+        if (tutorLogado.isPresent()) {
+
+            // Executa a procedure utilizando o ID do tutor autenticado
+            List<Long> idsPets = procedurePetService.buscarIdsPetsDoTutor(
+                    tutorLogado.get().getId());
+
+            // Mantém somente os pets retornados pela procedure
+            Set<Long> idsEncontrados = new HashSet<>(idsPets);
+
+            List<Pet> pets = tutorLogado.get().getPets().stream()
+                    .filter(pet -> idsEncontrados.contains(pet.getId()))
+                    .sorted(Comparator.comparing(Pet::getId))
+                    .toList();
+
+            mv.addObject("pets", pets);
+
+        } else {
+            mv.addObject("pets", new ArrayList<>());
+        }
+
+    } else {
+        // Médicos continuam visualizando todos os pets
+        mv.addObject("pets", petService.fetchAll(Pageable.unpaged()).getContent());
     }
+
+    mv.addObject("tutor", tutor);
+
+    return mv;
+}
+
 
     @GetMapping("/pet/novo")
     public ModelAndView retornarPaginaCadastro() {

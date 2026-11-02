@@ -20,11 +20,11 @@ public class Relatorio {
     private LocalDateTime data;
 
     @ManyToOne
-    @JoinColumn(name = "ID_hist_(PK)")
+    @JoinColumn(name = "ID_hist_FK")
     private Historico historico;
 
     @ManyToOne
-    @JoinColumn(name = "ID_med_(PK)")
+    @JoinColumn(name = "ID_med_FK")
     private Medico medico;
 
     @ManyToMany(mappedBy = "relatorios", fetch = FetchType.LAZY)

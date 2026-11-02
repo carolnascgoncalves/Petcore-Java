@@ -27,7 +27,7 @@ public class Prontuario {
 
 
     @ManyToOne
-    @JoinColumn(name = "ID_med_(PK)")
+    @JoinColumn(name = "ID_med_FK")
     private Medico medico;
 
     @OneToMany(mappedBy = "prontuario", fetch = FetchType.LAZY)
@@ -37,7 +37,7 @@ public class Prontuario {
     private Set<Receita> receitas = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "ID_hist_(PK)")
+    @JoinColumn(name = "ID_hist_FK")
     private Historico historico;
 
     public Prontuario() {}

@@ -22,11 +22,11 @@ public class Clinica {
     private String nome;
     
     @ManyToMany( fetch = FetchType.LAZY)
-    @JoinTable(name = "cli_rel_petcore",joinColumns = @JoinColumn(name="ID_cli_(FK)"),inverseJoinColumns = @JoinColumn(name="ID_rel_(FK)"))
+    @JoinTable(name = "cli_rel_petcore",joinColumns = @JoinColumn(name="ID_cli_FK"),inverseJoinColumns = @JoinColumn(name="ID_rel_FK"))
     private Set<Relatorio> relatorios;
 
     @OneToOne
-    @JoinColumn(name = "ID_end_(FK)", unique = true)
+    @JoinColumn(name = "ID_end_FK", unique = true)
     private Endereco endereco;
 
     public Clinica(long id, String cnpj, String nome, Set<Relatorio> relatorios, Endereco endereco) {

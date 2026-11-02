@@ -61,7 +61,7 @@ public class Pet {
     private Set<Tutor> tutores;
 
     @OneToOne
-    @JoinColumn(name = "ID_hist_(FK)", unique = true)
+    @JoinColumn(name = "ID_hist_FK", unique = true)
     private Historico historico;
 
     @OneToMany(mappedBy = "pet", fetch = FetchType.LAZY)

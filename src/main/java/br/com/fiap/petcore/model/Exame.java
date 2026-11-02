@@ -34,15 +34,15 @@ public class Exame {
 
 
     @ManyToOne
-    @JoinColumn(name = "ID_med_(PK)")
+    @JoinColumn(name = "ID_med_FK")
     private Medico medico;
 
     @ManyToOne
-    @JoinColumn(name = "ID_pront_(PK)")
+    @JoinColumn(name = "ID_pront_FK")
     private Prontuario prontuario;
 
     @ManyToOne
-    @JoinColumn(name = "ID_pet_(FK)")
+    @JoinColumn(name = "ID_pet_FK")
     private Pet pet;
 
     private boolean removido = false;

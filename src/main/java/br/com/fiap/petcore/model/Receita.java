@@ -41,21 +41,21 @@ public class Receita {
     private LocalDate validade;
 
     @ManyToOne
-    @JoinColumn(name = "ID_med_(PK)")
+    @JoinColumn(name = "ID_med_FK")
     private Medico medico;
 
     @ManyToOne
-    @JoinColumn(name = "ID_pront_(PK)")
+    @JoinColumn(name = "ID_pront_FK")
     private Prontuario prontuario;
 
     @ManyToOne
-    @JoinColumn(name = "ID_pet_(FK)")
+    @JoinColumn(name = "ID_pet_FK")
     private Pet pet;
 
     @ManyToMany
     @JoinTable(name="rec_medic_petcore",
-            joinColumns = @JoinColumn(name = "ID_rec_(FK)"),
-            inverseJoinColumns = @JoinColumn(name="ID_medic_(FK)"))
+            joinColumns = @JoinColumn(name = "ID_rec_FK"),
+            inverseJoinColumns = @JoinColumn(name="ID_medic_FK"))
     private Set<Medicamento> medicamentos;
 
     private boolean removida = false;
