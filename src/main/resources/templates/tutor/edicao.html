@@ -1,73 +1,89 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Editar Tutor - PetCore')}"></head>
 
-	<head th:replace="~{fragmentos :: cabecalho('Editar Tutor - PetCore')}"></head>
+<body>
 
-	<body>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container">
+<main class="pagina">
 
-	    <div th:replace="~{fragmentos :: menu}"></div>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">CONFIGURAÇÕES DA CONTA</span>
+            <h1>Editar meus dados</h1>
+            <p>Atualize suas informações pessoais.</p>
+        </div>
 
-	    <h1>Editar Tutor</h1>
+        <a th:href="@{/tutor/minha-conta}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
 
-	    <form th:action="@{/tutor/atualizar}" th:object="${tutor}" method="post">
+    <section class="formulario-card">
 
-	        <div>
+        <form th:action="@{/tutor/atualizar}"
+              th:object="${tutor}"
+              method="post">
 
-	            <label for="email">Email:</label>
+            <div class="formulario-secao">
 
-	            <input type="email" id="email" th:field="*{email}">
+                <div class="secao-titulo">
+                    <h2>Informações de acesso</h2>
+                    <p>Atualize seu email e telefone.</p>
+                </div>
 
-	            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                <div class="formulario-grid">
 
-	        </div>
+                    <div class="campo">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" th:field="*{email}">
+                        <span class="erro-campo"
+                              th:if="${#fields.hasErrors('email')}"
+                              th:errors="*{email}"></span>
+                    </div>
 
-	        <div>
+                    <div class="campo">
+                        <label for="telefone">Telefone</label>
+                        <input type="text" id="telefone"
+                               th:field="*{telefone}" maxlength="11">
+                        <span class="erro-campo"
+                              th:if="${#fields.hasErrors('telefone')}"
+                              th:errors="*{telefone}"></span>
+                    </div>
 
-	            <label for="telefone">Telefone:</label>
+                    <div class="campo campo-largo">
+                        <label for="senha">Nova senha</label>
+                        <input type="password" id="senha"
+                               th:field="*{senha}"
+                               placeholder="Deixe em branco para manter a senha atual">
+                        <span class="erro-campo"
+                              th:if="${#fields.hasErrors('senha')}"
+                              th:errors="*{senha}"></span>
+                    </div>
 
-	            <input type="text" id="telefone" th:field="*{telefone}" maxlength="11">
+                </div>
 
-	            <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+            </div>
 
-	        </div>
+            <div class="formulario-acoes">
+                <a th:href="@{/tutor/minha-conta}" class="botao botao-secundario">
+                    Cancelar
+                </a>
 
-	        <div>
+                <button type="submit" class="botao botao-principal">
+                    Salvar alterações
+                </button>
+            </div>
 
-	            <label for="senha">Nova senha:</label>
+        </form>
 
-	            <input type="password" id="senha" th:field="*{senha}">
+    </section>
 
-	            <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+</main>
 
-	        </div>
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
 
-	        <div>
-
-	            <label for="urlImg">URL da imagem:</label>
-
-	            <input type="text" id="urlImg" th:field="*{urlImg}">
-
-	            <div th:if="${#fields.hasErrors('urlImg')}" th:errors="*{urlImg}"></div>
-
-	        </div>
-
-	        <br>
-
-	        <button type="submit">Salvar alterações</button>
-
-	    </form>
-
-	    <br>
-
-	    <a th:href="@{/tutor/minha-conta}">Voltar</a>
-
-	</div>
-
-	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
-
-	</body>
-
+</body>
 </html>

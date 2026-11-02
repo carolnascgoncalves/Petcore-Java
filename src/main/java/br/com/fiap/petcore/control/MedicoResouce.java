@@ -1,6 +1,12 @@
 package br.com.fiap.petcore.control;
 
 import java.time.LocalDate;
+import java.io.IOException;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import br.com.fiap.petcore.service.ImagemUsuarioService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +39,9 @@ public class MedicoResouce {
 
     @Autowired
     private TutorService tutorService;
+    
+    @Autowired
+    private ImagemUsuarioService imagemUsuarioService;
 
     @GetMapping("/medico/novo")
     public ModelAndView retornarPaginaCadastro() {
@@ -131,5 +140,50 @@ public class MedicoResouce {
 
         request.logout();
         return new ModelAndView("redirect:/login?contaExcluida=true");
+    }
+    
+    @GetMapping("/medico/editar/imagem")
+    public ModelAndView editarImagem(Authentication authentication) {
+
+        Optional<Medico> medico = medicoService.fetchByEmail(authentication.getName());
+
+        if (medico.isEmpty()) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        ModelAndView mv = new ModelAndView("/medico/edicao_imagem");
+        mv.addObject("medico", medico.get());
+
+        return mv;
+    }
+
+    @PostMapping("/medico/atualizar/imagem")
+    public ModelAndView atualizarImagem(
+            @RequestParam("imagem") MultipartFile imagem,
+            Authentication authentication) {
+
+        Optional<Medico> medico = medicoService.fetchByEmail(authentication.getName());
+
+        if (medico.isEmpty()) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (imagem == null || imagem.isEmpty()) {
+            return new ModelAndView("redirect:/medico/editar/imagem?erro=sem-imagem");
+        }
+
+        try {
+            String caminho = imagemUsuarioService.salvar(imagem);
+
+            Medico patch = new Medico();
+            patch.setUrlImg(caminho);
+
+            medicoService.update(medico.get().getId(), patch);
+
+        } catch (IOException | IllegalArgumentException e) {
+            return new ModelAndView("redirect:/medico/editar/imagem?erro=upload");
+        }
+
+        return new ModelAndView("redirect:/medico/minha-conta");
     }
 }

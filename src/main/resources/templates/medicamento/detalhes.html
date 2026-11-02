@@ -1,23 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos :: cabecalho('Detalhes do Medicamento - PetCore')}"></head>
 
 <body>
 
-<div class="container">
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <div th:replace="~{fragmentos :: menu}"></div>
+<main class="pagina">
 
-    <h1>Detalhes do Medicamento</h1>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">CATÁLOGO</span>
+            <h1>Detalhes do medicamento</h1>
+            <p>Consulte as informações do medicamento cadastrado.</p>
+        </div>
 
-    <p><strong>Nome:</strong> <span th:text="${medicamento.nome}"></span></p>
-    <p><strong>Dosagem:</strong> <span th:text="${medicamento.dosagem}"></span></p>
+        <a th:href="@{/medicamento/listar}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
 
-    <a th:href="@{/medicamento/editar/{id}(id=${medicamento.id})}">Editar</a> |
-    <a th:href="@{/medicamento/listar}">Voltar</a>
+    <section class="perfil-usuario">
 
-</div>
+        <div class="historico-identificacao">
+            <div class="historico-pet-icone">💊</div>
+
+            <div>
+                <span class="pagina-etiqueta">MEDICAMENTO</span>
+                <h2 th:text="${medicamento.nome}"></h2>
+                <p>Informações do catálogo de medicamentos.</p>
+            </div>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Nome</span>
+                <strong th:text="${medicamento.nome}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Dosagem</span>
+                <strong th:text="${medicamento.dosagem}"></strong>
+            </div>
+
+        </div>
+
+        <div class="perfil-acoes">
+            <a th:href="@{/medicamento/editar/{id}(id=${medicamento.id})}"
+               class="botao botao-principal">
+                Editar medicamento
+            </a>
+        </div>
+
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
 

@@ -1,32 +1,157 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos :: cabecalho('Detalhes do Prontuário - PetCore')}"></head>
 
 <body>
-<div class="container">
-    <div th:replace="~{fragmentos :: menu}"></div>
 
-    <h1>Detalhes do Prontuário</h1>
-    <p><strong>Data:</strong> <span th:text="${prontuario.dataFormatada}"></span></p>
-    <p><strong>Descrição:</strong> <span th:text="${prontuario.descricao}"></span></p>
-    <p><strong>Médico:</strong> <span th:text="${prontuario.medico != null ? prontuario.medico.nome : 'Sem médico'}"></span></p>
-    <p><strong>Pet:</strong> <span th:text="${prontuario.historico != null && prontuario.historico.pet != null ? prontuario.historico.pet.nome : 'Sem pet'}"></span></p>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <h3>Exames</h3>
-    <ul>
-        <li th:each="exame : ${prontuario.exames}" th:text="${exame.removido ? 'Exame removido' : exame.nome}"></li>
-    </ul>
+<main class="pagina">
 
-    <h3>Receitas</h3>
-    <ul>
-        <li th:each="receita : ${prontuario.receitas}" th:text="${receita.removida ? 'Receita removida' : receita.nome}"></li>
-    </ul>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">REGISTRO CLÍNICO</span>
+            <h1>Prontuário</h1>
+            <p>Informações clínicas e registros associados ao atendimento.</p>
+        </div>
 
-    <span th:if="${prontuario.historico != null and prontuario.historico.pet != null and prontuario.historico.pet.status.name() == 'ATIVO'}"><a th:href="@{/prontuario/editar/{id}(id=${prontuario.id})}">Editar</a> | </span>
-    <a th:href="@{/prontuario/listar}">Voltar</a>
-</div>
+        <a th:href="@{/prontuario/listar}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
+
+    <section class="perfil-usuario">
+
+        <div class="historico-identificacao">
+            <div class="historico-pet-icone">📋</div>
+
+            <div>
+                <span class="pagina-etiqueta">PRONTUÁRIO</span>
+                <h2 th:text="${prontuario.historico != null and prontuario.historico.pet != null ? prontuario.historico.pet.nome : 'Pet não associado'}"></h2>
+                <p th:text="${prontuario.dataFormatada}"></p>
+            </div>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Data</span>
+                <strong th:text="${prontuario.dataFormatada}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Médico responsável</span>
+                <strong th:text="${prontuario.medico != null ? prontuario.medico.nome : 'Sem médico'}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Pet</span>
+                <strong th:text="${prontuario.historico != null and prontuario.historico.pet != null ? prontuario.historico.pet.nome : 'Sem pet'}"></strong>
+            </div>
+
+        </div>
+
+        <div class="bloco-instrucao">
+            <span>Descrição clínica</span>
+            <p th:text="${prontuario.descricao}"></p>
+        </div>
+
+        <div class="perfil-acoes"
+             th:if="${prontuario.historico != null and prontuario.historico.pet != null and prontuario.historico.pet.status.name() == 'ATIVO'}">
+
+            <a th:href="@{/prontuario/editar/{id}(id=${prontuario.id})}"
+               class="botao botao-principal">
+                Editar prontuário
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Exames relacionados</h2>
+            <p>Exames associados a este prontuário.</p>
+        </div>
+
+        <div class="lista-registros"
+             th:if="${!#sets.isEmpty(prontuario.exames)}">
+
+            <article class="registro-item" th:each="exame : ${prontuario.exames}">
+
+                <div class="registro-icone">🧪</div>
+
+                <div class="registro-conteudo">
+
+                    <strong th:if="${exame.removido}">Exame removido</strong>
+
+                    <a th:unless="${exame.removido}"
+                       th:href="@{/exame/detalhes/{id}(id=${exame.id})}"
+                       class="registro-titulo"
+                       th:text="${exame.nome}">
+                    </a>
+
+                    <span th:text="${exame.dataFormatada}"></span>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="estado-vazio" th:if="${#sets.isEmpty(prontuario.exames)}">
+            <div class="estado-vazio-icone">🧪</div>
+            <h2>Nenhum exame associado</h2>
+            <p>Os exames vinculados a este prontuário aparecerão aqui.</p>
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Receitas relacionadas</h2>
+            <p>Prescrições associadas a este prontuário.</p>
+        </div>
+
+        <div class="lista-registros"
+             th:if="${!#sets.isEmpty(prontuario.receitas)}">
+
+            <article class="registro-item" th:each="receita : ${prontuario.receitas}">
+
+                <div class="registro-icone">💊</div>
+
+                <div class="registro-conteudo">
+
+                    <strong th:if="${receita.removida}">Receita removida</strong>
+
+                    <a th:unless="${receita.removida}"
+                       th:href="@{/receita/detalhes/{id}(id=${receita.id})}"
+                       class="registro-titulo"
+                       th:text="${receita.nome}">
+                    </a>
+
+                    <span th:text="${receita.dataFormatada}"></span>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="estado-vazio" th:if="${#sets.isEmpty(prontuario.receitas)}">
+            <div class="estado-vazio-icone">💊</div>
+            <h2>Nenhuma receita associada</h2>
+            <p>As receitas vinculadas a este prontuário aparecerão aqui.</p>
+        </div>
+
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
 </body>
 </html>

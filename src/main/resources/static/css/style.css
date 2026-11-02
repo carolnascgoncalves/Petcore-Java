@@ -1046,3 +1046,370 @@ h3 {
 .container form button:hover {
     background: var(--roxo-escuro);
 }
+
+/* =========================================
+   PERFIL DE TUTOR E MÉDICO
+========================================= */
+
+.perfil-usuario {
+    padding: 28px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    box-shadow: var(--sombra);
+}
+
+.perfil-usuario-capa {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.perfil-usuario-foto {
+    width: 145px;
+    height: 145px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--roxo-suave);
+    border: 5px solid var(--roxo-claro);
+}
+
+.perfil-usuario-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil-usuario-foto .foto-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.perfil-usuario-titulo {
+    flex: 1;
+    min-width: 0;
+}
+
+.perfil-usuario-titulo h2 {
+    margin: 0;
+    color: var(--texto);
+    font-family: 'Nunito', sans-serif;
+    font-size: 27px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.perfil-usuario-titulo p {
+    margin: 7px 0 15px;
+    color: var(--texto-secundario);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.perfil-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.perfil-secao-titulo {
+    margin-top: 28px;
+    margin-bottom: 0;
+}
+
+.secao-conteudo {
+    margin-top: 35px;
+}
+
+.secao-conteudo > .secao-titulo {
+    margin-bottom: 18px;
+}
+
+.acoes-conta {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.botao-perigo {
+    background: var(--vermelho-claro);
+    color: var(--vermelho);
+}
+
+.botao-perigo:hover {
+    background: var(--vermelho);
+    color: white;
+}
+
+.foto-perfil-placeholder {
+    border-radius: 50%;
+}
+
+/* RESUMO DE REGISTROS DO MÉDICO */
+
+.resumo-registros {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.resumo-registro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    box-shadow: var(--sombra);
+    transition: .2s;
+}
+
+.resumo-registro:hover {
+    transform: translateY(-3px);
+    border-color: #c7c2ff;
+    background: var(--roxo-suave);
+}
+
+.resumo-registro-icone {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: var(--roxo-claro);
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+.resumo-registro strong {
+    color: var(--texto);
+    font-family: 'Nunito', sans-serif;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.resumo-registro small {
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+/* HISTÓRICO E IDENTIFICAÇÃO */
+
+.historico-identificacao {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--borda);
+}
+
+.historico-pet-icone {
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 17px;
+    background: var(--roxo-claro);
+    font-size: 29px;
+}
+
+.historico-identificacao h2 {
+    margin: 0;
+    color: var(--texto);
+    font-family: 'Nunito', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.historico-identificacao p {
+    margin: 6px 0 0;
+    color: var(--texto-secundario);
+    font-size: 13px;
+}
+
+.historico-acao-pet {
+    padding-top: 20px;
+}
+
+/* INSTRUÇÕES E DESCRIÇÕES */
+
+.bloco-instrucao {
+    margin-top: 25px;
+    padding: 20px;
+    background: var(--roxo-suave);
+    border-radius: 13px;
+}
+
+.bloco-instrucao span {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--roxo);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.bloco-instrucao p {
+    margin: 0;
+    color: var(--texto);
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* LISTAS DE REGISTROS */
+
+.lista-registros {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.registro-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px;
+    background: white;
+    border: 1px solid var(--borda);
+    border-radius: 13px;
+    box-shadow: var(--sombra);
+}
+
+.registro-icone {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: var(--roxo-claro);
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+.registro-conteudo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+.registro-conteudo strong {
+    color: var(--texto);
+}
+
+.registro-titulo {
+    color: var(--texto);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.registro-titulo:hover {
+    color: var(--roxo);
+}
+
+.registro-informacoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.registro-descricao {
+    margin: 7px 0;
+    color: var(--texto);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.medicamentos-resumo {
+    margin: 5px 0 0;
+    padding-left: 18px;
+    color: var(--texto-secundario);
+    line-height: 1.8;
+}
+
+/* PRÉVIA REDONDA DA FOTO */
+
+.upload-preview-redondo {
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.upload-preview-redondo img {
+    border-radius: 50%;
+}
+
+@media (max-width: 850px) {
+    .resumo-registros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .perfil-usuario {
+        padding: 20px;
+    }
+
+    .perfil-usuario-capa {
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .perfil-usuario-titulo {
+        width: 100%;
+    }
+
+    .perfil-acoes {
+        justify-content: center;
+    }
+
+    .perfil-acoes .botao {
+        flex: 1;
+    }
+
+    .perfil-usuario-titulo h2 {
+        font-size: 23px;
+    }
+
+    .resumo-registros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .historico-identificacao {
+        align-items: flex-start;
+    }
+
+    .historico-identificacao h2 {
+        font-size: 19px;
+    }
+
+    .registro-item {
+        padding: 14px;
+    }
+
+    .registro-informacoes {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .acoes-conta {
+        justify-content: stretch;
+    }
+
+    .acoes-conta .botao {
+        width: 100%;
+    }
+}

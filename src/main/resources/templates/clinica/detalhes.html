@@ -1,29 +1,74 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Detalhes da Clínica - PetCore')}"></head>
 
-	<head th:replace="~{fragmentos :: cabecalho('Detalhes da Clínica - PetCore')}"></head>
+<body>
 
-	<body>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container">
+<main class="pagina">
 
-	    <div th:replace="~{fragmentos :: menu}"></div>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ESTABELECIMENTO</span>
+            <h1>Detalhes da clínica</h1>
+            <p>Consulte os dados cadastrais e o endereço da clínica.</p>
+        </div>
 
-	    <h1>Detalhes da Clínica</h1>
+        <a th:href="@{/clinica/listar}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
 
-	    <p><strong>Nome:</strong> <span th:text="${clinica.nome}"></span></p>
-	    <p><strong>CNPJ:</strong> <span th:text="${clinica.cnpj}"></span></p>
-	    <p><strong>CEP:</strong> <span th:text="${clinica.endereco != null ? clinica.endereco.cep : 'Sem endereço'}"></span></p>
-        <p><strong>Complemento:</strong> <span th:text="${clinica.endereco != null && clinica.endereco.complemento != null ? clinica.endereco.complemento : 'Sem complemento'}"></span></p>
+    <section class="perfil-usuario">
 
-	    <a th:href="@{/clinica/editar/{id}(id=${clinica.id})}">Editar</a> |
-	    <a th:href="@{/clinica/listar}">Voltar</a>
+        <div class="historico-identificacao">
+            <div class="historico-pet-icone">🏥</div>
 
-	</div>
+            <div>
+                <span class="pagina-etiqueta">CLÍNICA</span>
+                <h2 th:text="${clinica.nome}"></h2>
+                <p>Estabelecimento cadastrado no PetCore</p>
+            </div>
+        </div>
 
-	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+        <div class="detalhes-grid">
 
-	</body>
+            <div class="detalhe-item">
+                <span>Nome</span>
+                <strong th:text="${clinica.nome}"></strong>
+            </div>
 
+            <div class="detalhe-item">
+                <span>CNPJ</span>
+                <strong th:text="${clinica.cnpj}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>CEP</span>
+                <strong th:text="${clinica.endereco != null ? clinica.endereco.cep : 'Sem endereço'}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Complemento</span>
+                <strong th:text="${clinica.endereco != null && clinica.endereco.complemento != null ? clinica.endereco.complemento : 'Sem complemento'}"></strong>
+            </div>
+
+        </div>
+
+        <div class="perfil-acoes">
+            <a th:href="@{/clinica/editar/{id}(id=${clinica.id})}"
+               class="botao botao-principal">
+                Editar clínica
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
 </html>

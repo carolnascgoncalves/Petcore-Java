@@ -1,27 +1,85 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos :: cabecalho('Detalhes do Exame - PetCore')}"></head>
 
 <body>
 
-<div class="container">
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <div th:replace="~{fragmentos :: menu}"></div>
+<main class="pagina">
 
-    <h1>Detalhes do Exame</h1>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ACOMPANHAMENTO CLÍNICO</span>
+            <h1>Detalhes do exame</h1>
+            <p>Consulte as informações do exame e seus vínculos.</p>
+        </div>
 
-    <p><strong>Nome:</strong> <span th:text="${exame.nome}"></span></p>
-    <p><strong>Data:</strong> <span th:text="${exame.dataFormatada}"></span></p>
-    <p><strong>Tipo:</strong> <span th:text="${exame.tipo}"></span></p>
-    <p><strong>Médico:</strong> <span th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></span></p>
-    <p><strong>Pet:</strong> <span th:text="${exame.pet != null ? exame.pet.nome : 'Sem pet'}"></span></p>
-    <p><strong>Prontuário:</strong> <span th:text="${exame.prontuario != null && exame.prontuario.historico != null && exame.prontuario.historico.pet != null ? 'Prontuário de ' + exame.prontuario.historico.pet.nome : 'Sem prontuário'}"></span></p>
+        <a th:href="@{/exame/listar}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
 
-    <a th:if="${medico and exame.pet != null and exame.pet.status.name() == 'ATIVO'}" th:href="@{/exame/editar/{id}(id=${exame.id})}">Editar</a> |
-    <a th:href="@{/exame/listar}">Voltar</a>
+    <section class="perfil-usuario">
 
-</div>
+        <div class="historico-identificacao">
+            <div class="historico-pet-icone">🧪</div>
+
+            <div>
+                <span class="pagina-etiqueta">EXAME</span>
+                <h2 th:text="${exame.nome}"></h2>
+                <p th:text="${exame.tipo}"></p>
+            </div>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Nome</span>
+                <strong th:text="${exame.nome}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Data</span>
+                <strong th:text="${exame.dataFormatada}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Tipo</span>
+                <strong th:text="${exame.tipo}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Médico responsável</span>
+                <strong th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Pet</span>
+                <strong th:text="${exame.pet != null ? exame.pet.nome : 'Sem pet'}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Prontuário</span>
+                <strong th:text="${exame.prontuario != null && exame.prontuario.historico != null && exame.prontuario.historico.pet != null ? 'Prontuário de ' + exame.prontuario.historico.pet.nome : 'Sem prontuário'}"></strong>
+            </div>
+
+        </div>
+
+        <div class="perfil-acoes"
+             th:if="${medico and exame.pet != null and exame.pet.status.name() == 'ATIVO'}">
+
+            <a th:href="@{/exame/editar/{id}(id=${exame.id})}"
+               class="botao botao-principal">
+                Editar exame
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
 

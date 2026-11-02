@@ -9,6 +9,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
           rel="stylesheet">
 
@@ -19,6 +20,7 @@
 <body>
 
 <header th:fragment="menu" class="topo">
+
     <div class="topo-conteudo">
 
         <a th:href="@{/home}" class="marca">
@@ -27,18 +29,38 @@
         </a>
 
         <nav class="navegacao">
+
             <a th:href="@{/home}">Início</a>
             <a th:href="@{/pet/listar}">Pets</a>
             <a th:href="@{/historico/listar}">Históricos</a>
             <a th:href="@{/exame/listar}">Exames</a>
             <a th:href="@{/receita/listar}">Receitas</a>
+
+            <th:block th:if="${menuMedico}">
+
+                <a th:href="@{/prontuario/listar}">Prontuários</a>
+                <a th:href="@{/medicamento/listar}">Medicamentos</a>
+                <a th:href="@{/clinica/listar}">Clínicas</a>
+                <a th:href="@{/relatorio/listar}">Relatórios</a>
+
+                <a th:href="@{/medico/minha-conta}">Minha conta</a>
+
+            </th:block>
+
+            <a th:unless="${menuMedico}" th:href="@{/tutor/minha-conta}">
+                Minha conta
+            </a>
+
         </nav>
 
         <form th:action="@{/logout}" method="post" class="form-logout">
-            <button type="submit" class="botao-sair">Sair <span>↗</span></button>
+            <button type="submit" class="botao-sair">
+                Sair <span>↗</span>
+            </button>
         </form>
 
     </div>
+
 </header>
 
 <script th:fragment="bootstrap-script"

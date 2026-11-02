@@ -1,55 +1,193 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos :: cabecalho('Detalhes do Histórico - PetCore')}"></head>
+<head th:replace="~{fragmentos :: cabecalho('Histórico do Pet - PetCore')}"></head>
 
 <body>
 
-<div class="container">
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <div th:replace="~{fragmentos :: menu}"></div>
+<main class="pagina">
 
-    <h1>Detalhes do Histórico</h1>
-
-    <p><strong>Data:</strong> <span th:text="${historico.dataFormatada}"></span></p>
-    <p><strong>Status:</strong> <span th:text="${historico.status}"></span></p>
-    <p><strong>Pet:</strong> <span th:text="${historico.pet != null ? historico.pet.nome : 'Sem pet'}"></span></p>
-
-    <h2>Exames realizados</h2>
-
-    <p th:if="${#lists.isEmpty(examesRealizados)}">Nenhum exame foi realizado ainda.</p>
-
-    <div th:each="exame : ${examesRealizados}">
-        <p th:if="${exame.removido}"><strong>Exame removido</strong> — <span th:text="${exame.dataFormatada}"></span></p>
-        <div th:unless="${exame.removido}">
-            <p><strong><a th:href="@{/exame/detalhes/{id}(id=${exame.id})}" th:text="${exame.nome}"></a></strong> — <span th:text="${exame.dataFormatada}"></span></p>
-            <p><strong>Tipo:</strong> <span th:text="${exame.tipo}"></span></p>
-            <p><strong>Médico:</strong> <span th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></span></p>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ACOMPANHAMENTO</span>
+            <h1>Histórico do pet</h1>
+            <p>Consulte os registros e acontecimentos relacionados à saúde do animal.</p>
         </div>
+
+        <a th:href="@{/historico/listar}" class="botao botao-secundario">
+            ← Voltar
+        </a>
     </div>
 
-    <h2>Receitas vencidas</h2>
+    <section class="perfil-usuario">
 
-    <p th:if="${#lists.isEmpty(receitasVencidas)}">Nenhuma receita vencida.</p>
+        <div class="historico-identificacao">
 
-    <div th:each="receita : ${receitasVencidas}">
-        <p th:if="${receita.removida}"><strong>Receita removida</strong> — <span th:text="${receita.dataFormatada}"></span></p>
-        <div th:unless="${receita.removida}">
-            <p><strong><a th:href="@{/receita/detalhes/{id}(id=${receita.id})}" th:text="${receita.nome}"></a></strong> — <span th:text="${receita.dataFormatada}"></span></p>
-            <p><strong>Validade:</strong> <span th:text="${receita.validade}"></span></p>
-            <p><strong>Médico:</strong> <span th:text="${receita.medico != null ? receita.medico.nome : 'Sem médico'}"></span></p>
-            <p><strong>Instrução:</strong> <span th:text="${receita.instrucao}"></span></p>
-            <p><strong>Medicamentos:</strong></p>
-            <p th:if="${#sets.isEmpty(receita.medicamentos)}">Nenhum medicamento registrado.</p>
-            <ul th:unless="${#sets.isEmpty(receita.medicamentos)}">
-                <li th:each="medicamento : ${receita.medicamentos}" th:text="${medicamento.nome + ' — ' + medicamento.dosagem}"></li>
-            </ul>
+            <div class="historico-pet-icone">🐾</div>
+
+            <div>
+                <span class="pagina-etiqueta">PET</span>
+
+                <h2 th:text="${historico.pet != null ? historico.pet.nome : 'Sem pet associado'}"></h2>
+
+                <p>
+                    Histórico criado em
+                    <strong th:text="${historico.dataFormatada}"></strong>
+                </p>
+            </div>
+
         </div>
-    </div>
 
-    <a th:href="@{/historico/listar}">Voltar</a>
+        <div class="detalhes-grid">
 
-</div>
+            <div class="detalhe-item">
+                <span>Data</span>
+                <strong th:text="${historico.dataFormatada}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Status</span>
+                <strong th:text="${historico.status}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Pet</span>
+                <strong th:text="${historico.pet != null ? historico.pet.nome : 'Sem pet'}"></strong>
+            </div>
+
+        </div>
+
+        <div class="perfil-acoes historico-acao-pet"
+             th:if="${historico.pet != null}">
+            <a th:href="@{/pet/detalhes/{id}(id=${historico.pet.id})}"
+               class="botao botao-secundario">
+                Ver perfil do pet
+            </a>
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Exames realizados</h2>
+            <p>Exames com data já alcançada ou anterior.</p>
+        </div>
+
+        <div class="lista-registros"
+             th:if="${!#lists.isEmpty(examesRealizados)}">
+
+            <article class="registro-item" th:each="exame : ${examesRealizados}">
+
+                <div class="registro-icone">🧪</div>
+
+                <div class="registro-conteudo">
+
+                    <strong th:if="${exame.removido}">Exame removido</strong>
+
+                    <a th:unless="${exame.removido}"
+                       th:href="@{/exame/detalhes/{id}(id=${exame.id})}"
+                       th:text="${exame.nome}"
+                       class="registro-titulo">
+                    </a>
+
+                    <span th:text="${exame.dataFormatada}"></span>
+
+                    <div th:unless="${exame.removido}" class="registro-informacoes">
+                        <span>Tipo: <strong th:text="${exame.tipo}"></strong></span>
+                        <span>Médico:
+                            <strong th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></strong>
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="estado-vazio" th:if="${#lists.isEmpty(examesRealizados)}">
+            <div class="estado-vazio-icone">🧪</div>
+            <h2>Nenhum exame realizado</h2>
+            <p>Os exames realizados aparecerão aqui.</p>
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Receitas vencidas</h2>
+            <p>Receitas cuja validade já terminou.</p>
+        </div>
+
+        <div class="lista-registros"
+             th:if="${!#lists.isEmpty(receitasVencidas)}">
+
+            <article class="registro-item" th:each="receita : ${receitasVencidas}">
+
+                <div class="registro-icone">💊</div>
+
+                <div class="registro-conteudo">
+
+                    <strong th:if="${receita.removida}">Receita removida</strong>
+
+                    <a th:unless="${receita.removida}"
+                       th:href="@{/receita/detalhes/{id}(id=${receita.id})}"
+                       th:text="${receita.nome}"
+                       class="registro-titulo">
+                    </a>
+
+                    <span th:text="${receita.dataFormatada}"></span>
+
+                    <div th:unless="${receita.removida}" class="registro-informacoes">
+                        <span>Validade:
+                            <strong th:text="${receita.validade}"></strong>
+                        </span>
+
+                        <span>Médico:
+                            <strong th:text="${receita.medico != null ? receita.medico.nome : 'Sem médico'}"></strong>
+                        </span>
+                    </div>
+
+                    <p th:unless="${receita.removida}"
+                       class="registro-descricao"
+                       th:text="${receita.instrucao}">
+                    </p>
+
+                    <div th:unless="${receita.removida}">
+                        <strong>Medicamentos</strong>
+
+                        <ul class="medicamentos-resumo"
+                            th:if="${!#sets.isEmpty(receita.medicamentos)}">
+                            <li th:each="medicamento : ${receita.medicamentos}"
+                                th:text="${medicamento.nome + ' — ' + medicamento.dosagem}">
+                            </li>
+                        </ul>
+
+                        <p class="texto-secundario"
+                           th:if="${#sets.isEmpty(receita.medicamentos)}">
+                            Nenhum medicamento registrado.
+                        </p>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="estado-vazio" th:if="${#lists.isEmpty(receitasVencidas)}">
+            <div class="estado-vazio-icone">💊</div>
+            <h2>Nenhuma receita vencida</h2>
+            <p>As receitas vencidas aparecerão aqui.</p>
+        </div>
+
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Foto do Médico - PetCore')}"></head>
+
+<body>
+
+<div th:replace="~{fragmentos :: menu}"></div>
+
+<main class="pagina">
+
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">PERSONALIZAÇÃO</span>
+            <h1>Minha foto</h1>
+            <p>Escolha uma foto para personalizar seu perfil profissional.</p>
+        </div>
+
+        <a th:href="@{/medico/minha-conta}" class="botao botao-secundario">
+            ← Voltar
+        </a>
+    </div>
+
+    <section class="formulario-card formulario-imagem">
+
+        <div class="mensagem-erro" th:if="${param.erro}">
+            <span th:if="${param.erro[0] == 'sem-imagem'}">
+                Selecione uma imagem antes de salvar.
+            </span>
+            <span th:if="${param.erro[0] == 'upload'}">
+                Não foi possível enviar a imagem. Confira o formato e o tamanho.
+            </span>
+        </div>
+
+        <div class="foto-atual">
+            <img th:if="${medico.urlImg != null and !medico.urlImg.isEmpty()}"
+                 th:src="${medico.urlImg}"
+                 alt="Foto atual do médico">
+
+            <div th:unless="${medico.urlImg != null and !medico.urlImg.isEmpty()}"
+                 class="foto-placeholder foto-perfil-placeholder">
+                🩺
+            </div>
+        </div>
+
+        <form th:action="@{/medico/atualizar/imagem}"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="upload-area">
+
+                <div class="upload-preview upload-preview-redondo">
+                    <span id="preview-placeholder">🩺</span>
+                    <img id="preview-imagem" alt="Prévia da nova foto" hidden>
+                </div>
+
+                <div class="upload-conteudo">
+                    <label for="imagem" class="botao botao-secundario">
+                        Escolher foto
+                    </label>
+
+                    <input type="file" id="imagem" name="imagem"
+                           accept="image/png,image/jpeg,image/webp"
+                           class="input-arquivo">
+
+                    <small>JPG, PNG ou WEBP. Máximo de 5 MB.</small>
+
+                    <span id="nome-arquivo" class="texto-arquivo">
+                        Nenhuma foto selecionada
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="formulario-acoes">
+                <a th:href="@{/medico/minha-conta}" class="botao botao-secundario">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="botao botao-principal">
+                    Salvar foto
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script>
+    const campoImagem = document.getElementById("imagem");
+    const previewImagem = document.getElementById("preview-imagem");
+    const placeholder = document.getElementById("preview-placeholder");
+    const nomeArquivo = document.getElementById("nome-arquivo");
+
+    campoImagem.addEventListener("change", function () {
+        const arquivo = this.files[0];
+
+        if (!arquivo) return;
+
+        if (arquivo.size > 5 * 1024 * 1024) {
+            alert("A imagem deve ter no máximo 5 MB.");
+            this.value = "";
+            return;
+        }
+
+        previewImagem.src = URL.createObjectURL(arquivo);
+        previewImagem.hidden = false;
+        placeholder.hidden = true;
+        nomeArquivo.textContent = arquivo.name;
+    });
+</script>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

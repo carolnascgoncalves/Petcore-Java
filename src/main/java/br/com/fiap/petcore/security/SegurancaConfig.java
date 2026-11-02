@@ -23,6 +23,32 @@ public class SegurancaConfig {
 				.requestMatchers("/receita/nova","/receita/cadastrar","/receita/remover/**","/historico/remover/**").hasAuthority("ROLE_MEDICO")
 				.requestMatchers("/pet/listar","/pet/detalhes/**","/historico/listar","/historico/detalhes/**","/exame/listar","/exame/detalhes/**","/receita/listar","/receita/detalhes/**").hasAnyAuthority("ROLE_TUTOR","ROLE_MEDICO")
 				.requestMatchers("/img/**", "/css/**", "/uploads/**", "/h2-console/**").permitAll()
+				.requestMatchers("/img/**", "/css/**", "/uploads/**", "/h2-console/**").permitAll()
+				.requestMatchers(
+					    "/tutor/minha-conta",
+					    "/tutor/editar",
+					    "/tutor/atualizar",
+					    "/tutor/apagar",
+					    "/tutor/editar/imagem",
+					    "/tutor/atualizar/imagem",
+					    "/pet/novo",
+					    "/pet/cadastrar",
+					    "/pet/editar/**",
+					    "/pet/atualizar/**"
+					).hasAuthority("ROLE_TUTOR")
+				.requestMatchers(
+					    "/medico/minha-conta",
+					    "/medico/editar",
+					    "/medico/atualizar",
+					    "/medico/apagar",
+					    "/medico/editar/imagem",
+					    "/medico/atualizar/imagem",
+					    "/clinica/**",
+					    "/endereco/**",
+					    "/medicamento/**",
+					    "/prontuario/**",
+					    "/relatorio/**"
+					).hasAuthority("ROLE_MEDICO")
 				.anyRequest().authenticated())
 				
 		//Configurações necessárias para acesso ao console do Banco H2 em qualquer navegador

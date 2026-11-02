@@ -1,40 +1,150 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Minha conta - PetCore')}"></head>
 
-	<head th:replace="~{fragmentos :: cabecalho('Detalhes do Médico - PetCore')}"></head>
+<body>
 
-	<body>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container">
+<main class="pagina">
 
-	    <div th:replace="~{fragmentos :: menu}"></div>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ÁREA PROFISSIONAL</span>
+            <h1>Minha conta</h1>
+            <p>Gerencie seus dados profissionais e acompanhe seus registros.</p>
+        </div>
 
-	    <h1>Detalhes do Médico</h1>
-<p><strong>Nome:</strong> <span th:text="${medico.nome}"></span></p>
+        <a th:href="@{/home}" class="botao botao-secundario">← Início</a>
+    </div>
 
-	    <p><strong>Data de nascimento:</strong> <span th:text="${medico.dataNascimento}"></span></p>
+    <div class="mensagem-erro" th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
 
-	    <p><strong>Telefone:</strong> <span th:text="${medico.telefone}"></span></p>
+    <section class="perfil-usuario">
 
-	    <p><strong>Email:</strong> <span th:text="${medico.email}"></span></p>
+        <div class="perfil-usuario-capa">
 
-	    <p><strong>Sexo:</strong> <span th:text="${medico.sexo}"></span></p>
+            <div class="perfil-usuario-foto">
 
-	    <p><strong>Especialidade:</strong> <span th:text="${medico.especialidade}"></span></p>
+                <img th:if="${medico.urlImg != null and !medico.urlImg.isEmpty()}"
+                     th:src="${medico.urlImg}"
+                     alt="Foto do médico">
 
-	    <p><strong>Imagem:</strong> <span th:text="${medico.urlImg}"></span></p>
+                <div th:unless="${medico.urlImg != null and !medico.urlImg.isEmpty()}"
+                     class="foto-placeholder">
+                    🩺
+                </div>
 
-	    <div th:if="${erroExclusao}" class="alerta-erro" th:text="${erroExclusao}"></div>
+            </div>
 
-    <a th:href="@{/medico/editar}">Editar meus dados</a> |
-    <a th:href="@{/medico/apagar}" onclick="return confirm('Deseja realmente apagar sua conta?')">Apagar conta</a> |
-    <a th:href="@{/home}">Voltar</a>
+            <div class="perfil-usuario-titulo">
+                <span class="pagina-etiqueta">PERFIL PROFISSIONAL</span>
+                <h2 th:text="${medico.nome}"></h2>
+                <p th:text="${medico.especialidade}"></p>
 
-	</div>
+                <div class="perfil-acoes">
+                    <a th:href="@{/medico/editar/imagem}" class="botao botao-secundario">
+                        Alterar foto
+                    </a>
 
-	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+                    <a th:href="@{/medico/editar}" class="botao botao-principal">
+                        Editar dados
+                    </a>
+                </div>
+            </div>
 
-	</body>
+        </div>
 
+        <div class="secao-titulo perfil-secao-titulo">
+            <h2>Informações profissionais</h2>
+            <p>Seus dados cadastrados no PetCore.</p>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Nome completo</span>
+                <strong th:text="${medico.nome}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Especialidade</span>
+                <strong th:text="${medico.especialidade}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Data de nascimento</span>
+                <strong th:text="${medico.dataNascimento}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Telefone</span>
+                <strong th:text="${medico.telefone}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Email</span>
+                <strong th:text="${medico.email}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Sexo</span>
+                <strong th:text="${medico.sexo}"></strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Meus registros</h2>
+            <p>Atalhos para os registros associados ao seu perfil.</p>
+        </div>
+
+        <div class="resumo-registros">
+
+            <a th:href="@{/exame/listar}" class="resumo-registro">
+                <span class="resumo-registro-icone">🧪</span>
+                <strong th:text="${medico.exames != null ? #sets.size(medico.exames) : 0}">0</strong>
+                <small>Exames</small>
+            </a>
+
+            <a th:href="@{/receita/listar}" class="resumo-registro">
+                <span class="resumo-registro-icone">💊</span>
+                <strong th:text="${medico.receitas != null ? #sets.size(medico.receitas) : 0}">0</strong>
+                <small>Receitas</small>
+            </a>
+
+            <a th:href="@{/prontuario/listar}" class="resumo-registro">
+                <span class="resumo-registro-icone">📋</span>
+                <strong th:text="${medico.prontuarios != null ? #sets.size(medico.prontuarios) : 0}">0</strong>
+                <small>Prontuários</small>
+            </a>
+
+            <a th:href="@{/relatorio/listar}" class="resumo-registro">
+                <span class="resumo-registro-icone">📊</span>
+                <strong th:text="${medico.relatorios != null ? #sets.size(medico.relatorios) : 0}">0</strong>
+                <small>Relatórios</small>
+            </a>
+
+        </div>
+
+    </section>
+
+    <div class="acoes-conta">
+        <a th:href="@{/medico/apagar}"
+           class="botao botao-perigo"
+           onclick="return confirm('Deseja realmente apagar sua conta?')">
+            Apagar minha conta
+        </a>
+    </div>
+
+</main>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
 </html>

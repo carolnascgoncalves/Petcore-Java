@@ -1,38 +1,169 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Minha conta - PetCore')}"></head>
 
-	<head th:replace="~{fragmentos :: cabecalho('Detalhes do Tutor - PetCore')}"></head>
+<body>
 
-	<body>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container">
+<main class="pagina">
 
-	    <div th:replace="~{fragmentos :: menu}"></div>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ÁREA DO TUTOR</span>
+            <h1>Minha conta</h1>
+            <p>Consulte seus dados pessoais e os pets vinculados à sua conta.</p>
+        </div>
 
-	    <h1>Detalhes do Tutor</h1>
-<p><strong>Nome:</strong> <span th:text="${tutor.nome}"></span></p>
+        <a th:href="@{/home}" class="botao botao-secundario">← Início</a>
+    </div>
 
-	    <p><strong>Data de nascimento:</strong> <span th:text="${tutor.dataNascimento}"></span></p>
+    <div class="mensagem-erro" th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
 
-	    <p><strong>Telefone:</strong> <span th:text="${tutor.telefone}"></span></p>
+    <section class="perfil-usuario">
 
-	    <p><strong>Email:</strong> <span th:text="${tutor.email}"></span></p>
+        <div class="perfil-usuario-capa">
 
-	    <p><strong>Sexo:</strong> <span th:text="${tutor.sexo}"></span></p>
+            <div class="perfil-usuario-foto">
+                <img th:if="${tutor.urlImg != null and !tutor.urlImg.isEmpty()}"
+                     th:src="${tutor.urlImg}"
+                     alt="Foto do tutor">
 
-	    <p><strong>Imagem:</strong> <span th:text="${tutor.urlImg}"></span></p>
+                <div th:unless="${tutor.urlImg != null and !tutor.urlImg.isEmpty()}"
+                     class="foto-placeholder">
+                    👤
+                </div>
+            </div>
 
-	    <div th:if="${erroExclusao}" class="alerta-erro" th:text="${erroExclusao}"></div>
+            <div class="perfil-usuario-titulo">
+                <span class="pagina-etiqueta">PERFIL DO TUTOR</span>
+                <h2 th:text="${tutor.nome}">Nome do tutor</h2>
+                <p th:text="${tutor.email}">email@email.com</p>
 
-    <a th:href="@{/tutor/editar}">Editar meus dados</a> |
-    <a th:href="@{/tutor/apagar}" onclick="return confirm('Deseja realmente apagar sua conta?')">Apagar conta</a> |
-    <a th:href="@{/home}">Voltar</a>
+                <div class="perfil-acoes">
+                    <a th:href="@{/tutor/editar/imagem}" class="botao botao-secundario">
+                        Alterar foto
+                    </a>
 
-	</div>
+                    <a th:href="@{/tutor/editar}" class="botao botao-principal">
+                        Editar dados
+                    </a>
+                </div>
+            </div>
 
-	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+        </div>
 
-	</body>
+        <div class="secao-titulo perfil-secao-titulo">
+            <h2>Informações pessoais</h2>
+            <p>Seus dados cadastrados no PetCore.</p>
+        </div>
 
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Nome completo</span>
+                <strong th:text="${tutor.nome}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Data de nascimento</span>
+                <strong th:text="${tutor.dataNascimento}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Telefone</span>
+                <strong th:text="${tutor.telefone}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Email</span>
+                <strong th:text="${tutor.email}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Sexo</span>
+                <strong th:text="${tutor.sexo}"></strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="secao-conteudo">
+
+        <div class="secao-titulo">
+            <h2>Meus pets</h2>
+            <p>Animais vinculados à sua conta.</p>
+        </div>
+
+        <div class="pets-grid" th:if="${!#sets.isEmpty(tutor.pets)}">
+
+            <article class="pet-card" th:each="pet : ${tutor.pets}">
+
+                <div class="pet-card-foto">
+
+                    <img th:if="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                         th:src="${pet.urlImg}"
+                         th:alt="${'Foto de ' + pet.nome}">
+
+                    <div th:unless="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                         class="foto-placeholder">
+                        🐾
+                    </div>
+
+                </div>
+
+                <div class="pet-card-conteudo">
+
+                    <div class="pet-card-titulo">
+                        <div>
+                            <h2 th:text="${pet.nome}"></h2>
+                            <p th:text="${pet.especie}"></p>
+                        </div>
+
+                        <span class="status-pet"
+                              th:classappend="${pet.status.name() == 'ATIVO'} ? ' status-ativo' : ' status-inativo'"
+                              th:text="${pet.status}">
+                        </span>
+                    </div>
+
+                    <div class="pet-card-acoes">
+                        <a th:href="@{/pet/detalhes/{id}(id=${pet.id})}"
+                           class="botao botao-principal botao-card">
+                            Ver detalhes
+                        </a>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="estado-vazio" th:if="${#sets.isEmpty(tutor.pets)}">
+            <div class="estado-vazio-icone">🐾</div>
+            <h2>Nenhum pet cadastrado</h2>
+            <p>Cadastre seu primeiro pet para começar a acompanhar seus cuidados.</p>
+
+            <a th:href="@{/pet/novo}" class="botao botao-principal">
+                Cadastrar pet
+            </a>
+        </div>
+
+    </section>
+
+    <div class="acoes-conta">
+        <a th:href="@{/tutor/apagar}"
+           class="botao botao-perigo"
+           onclick="return confirm('Deseja realmente apagar sua conta?')">
+            Apagar minha conta
+        </a>
+    </div>
+
+</main>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
 </html>

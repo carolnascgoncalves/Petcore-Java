@@ -1,6 +1,12 @@
 package br.com.fiap.petcore.control;
 
 import java.time.LocalDate;
+import java.io.IOException;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import br.com.fiap.petcore.service.ImagemUsuarioService;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,6 +39,9 @@ public class TutorResource {
 
     @Autowired
     private MedicoService medicoService;
+    
+    @Autowired
+    private ImagemUsuarioService imagemUsuarioService;
 
     @GetMapping("/tutor/novo")
     public ModelAndView retornarPaginaCadastro() {
@@ -129,5 +138,49 @@ public class TutorResource {
         if (tutor.isPresent()) tutorService.delete(tutor.get().getId());
         request.logout();
         return new ModelAndView("redirect:/login?contaExcluida=true");
+    }
+    @GetMapping("/tutor/editar/imagem")
+    public ModelAndView editarImagem(Authentication authentication) {
+
+        Optional<Tutor> tutor = tutorService.fetchByEmail(authentication.getName());
+
+        if (tutor.isEmpty()) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        ModelAndView mv = new ModelAndView("/tutor/edicao_imagem");
+        mv.addObject("tutor", tutor.get());
+
+        return mv;
+    }
+
+    @PostMapping("/tutor/atualizar/imagem")
+    public ModelAndView atualizarImagem(
+            @RequestParam("imagem") MultipartFile imagem,
+            Authentication authentication) {
+
+        Optional<Tutor> tutor = tutorService.fetchByEmail(authentication.getName());
+
+        if (tutor.isEmpty()) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (imagem == null || imagem.isEmpty()) {
+            return new ModelAndView("redirect:/tutor/editar/imagem?erro=sem-imagem");
+        }
+
+        try {
+            String caminho = imagemUsuarioService.salvar(imagem);
+
+            Tutor patch = new Tutor();
+            patch.setUrlImg(caminho);
+
+            tutorService.update(tutor.get().getId(), patch);
+
+        } catch (IOException | IllegalArgumentException e) {
+            return new ModelAndView("redirect:/tutor/editar/imagem?erro=upload");
+        }
+
+        return new ModelAndView("redirect:/tutor/minha-conta");
     }
 }
