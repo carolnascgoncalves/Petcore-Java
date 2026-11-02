@@ -1,7 +1,6 @@
 package br.com.fiap.petcore.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -37,7 +36,6 @@ public class Receita {
     private LocalDateTime data;
 
     @DateTimeFormat(iso = ISO.DATE)
-    @FutureOrPresent(message = "A validade não pode ser anterior à presente")
     private LocalDate validade;
 
     @ManyToOne
