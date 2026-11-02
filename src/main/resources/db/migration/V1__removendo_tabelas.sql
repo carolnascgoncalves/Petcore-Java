@@ -1,0 +1,14 @@
+drop table if exists cli_rel_petcore cascade;
+drop table if exists rec_medic_petcore cascade;
+drop table if exists tut_pet_petcore cascade;
+drop table if exists exame_petcore cascade;
+drop table if exists receita_petcore cascade;
+drop table if exists prontuario_petcore cascade;
+drop table if exists relatorio_petcore cascade;
+drop table if exists pet_petcore cascade;
+drop table if exists historico_petcore cascade;
+drop table if exists clinica_petcore cascade;
+drop table if exists endereco_petcore cascade;
+drop table if exists medicamento_petcore cascade;
+drop table if exists tutor_petcore cascade;
+drop table if exists medico_petcore cascade;

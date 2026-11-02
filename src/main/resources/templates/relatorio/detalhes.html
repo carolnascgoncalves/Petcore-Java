@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Relatório - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Relatório</h1>
+    <p><strong>Data de criação:</strong> <span th:text="${relatorio.dataFormatada}"></span></p>
+    <p><strong>Observação:</strong> <span th:text="${relatorio.observacao}"></span></p>
+    <p><strong>Pet:</strong> <span th:text="${relatorio.historico != null && relatorio.historico.pet != null ? relatorio.historico.pet.nome : 'Sem pet'}"></span></p>
+    <p><strong>Médico:</strong> <span th:text="${relatorio.medico != null ? relatorio.medico.nome : 'Sem médico'}"></span></p>
+
+    <span th:if="${relatorio.historico != null and relatorio.historico.pet != null and relatorio.historico.pet.status.name() == 'ATIVO'}"><a th:href="@{/relatorio/editar/{id}(id=${relatorio.id})}">Editar</a> | </span>
+    <a th:href="@{/relatorio/listar}">Voltar</a>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

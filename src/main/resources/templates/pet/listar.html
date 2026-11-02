@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Pets - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Pets</h1>
+
+    <p th:if="${#lists.isEmpty(pets)}" class="lista-vazia">Nenhum pet cadastrado.</p>
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+    <a th:if="${tutor}" th:href="@{/pet/novo}">Cadastrar novo pet</a>
+    <br><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Espécie</th>
+                <th>Raça</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.nome}"></td>
+                <td th:text="${pet.especie}"></td>
+                <td th:text="${pet.raca}"></td>
+                <td th:text="${pet.status}"></td>
+                <td>
+                    <a th:href="@{/pet/detalhes/{id}(id=${pet.id})}">Detalhes</a><span th:if="${tutor and pet.status.name() == 'ATIVO'}"> |
+                        <a th:href="@{/pet/editar/status/{id}(id=${pet.id})}">Alterar status</a> |
+                        <a th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}">Editar imagem</a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

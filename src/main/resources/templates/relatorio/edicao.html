@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Editar Relatório - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Editar Relatório</h1>
+
+    <form th:action="@{/relatorio/atualizar/{id}(id=${id})}" th:object="${relatorio}" method="post">
+
+        <div>
+            <label for="observacao">Observação:</label>
+            <textarea id="observacao" th:field="*{observacao}"></textarea>
+            <div th:if="${#fields.hasErrors('observacao')}" th:errors="*{observacao}"></div>
+        </div>
+
+        <br>
+
+        <button type="submit">Salvar alterações</button>
+
+    </form>
+
+    <br>
+
+    <a th:href="@{/relatorio/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

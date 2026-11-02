@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Receitas - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Receitas</h1>
+
+    <p th:if="${#lists.isEmpty(receitas)}" class="lista-vazia">Nenhuma receita válida cadastrada.</p>
+    <a th:if="${medico}" th:href="@{/receita/nova}">Cadastrar nova receita</a>
+    <br><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Nome</th>
+                <th>Pet</th>
+                <th>Validade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="receita : ${receitas}">
+                <td th:text="${receita.dataFormatada}"></td>
+                <td th:text="${receita.nome}"></td>
+                <td th:text="${receita.pet != null ? receita.pet.nome : 'Sem pet'}"></td>
+                <td th:text="${receita.validadeFormatada}"></td>
+                <td>
+                    <a th:href="@{/receita/detalhes/{id}(id=${receita.id})}">Detalhes</a><span th:if="${medico and receita.pet != null and receita.pet.status.name() == 'ATIVO'}"> | <a th:href="@{/receita/remover/{id}(id=${receita.id})}">Remover</a></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

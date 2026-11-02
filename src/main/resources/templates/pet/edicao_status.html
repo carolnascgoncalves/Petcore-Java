@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Editar Status - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Editar Status do Pet</h1>
+
+	    <form th:action="@{/pet/atualizar/status/{id}(id=${id})}" th:object="${pet}" method="post">
+
+	        <div>
+	            <label for="statusEnum">Status:</label>
+
+	            <select id="statusEnum" th:field="*{statusEnum}">
+                <option value="INATIVO">INATIVO</option>
+            </select>
+
+	            <div th:if="${#fields.hasErrors('statusEnum')}" th:errors="*{statusEnum}"></div>
+	        </div>
+
+	        <br>
+
+	        <button type="submit">Salvar</button>
+
+	    </form>
+
+	    <br>
+
+	    <a th:href="@{/pet/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

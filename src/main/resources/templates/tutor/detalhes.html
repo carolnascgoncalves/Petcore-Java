@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Detalhes do Tutor - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Detalhes do Tutor</h1>
+<p><strong>Nome:</strong> <span th:text="${tutor.nome}"></span></p>
+
+	    <p><strong>Data de nascimento:</strong> <span th:text="${tutor.dataNascimento}"></span></p>
+
+	    <p><strong>Telefone:</strong> <span th:text="${tutor.telefone}"></span></p>
+
+	    <p><strong>Email:</strong> <span th:text="${tutor.email}"></span></p>
+
+	    <p><strong>Sexo:</strong> <span th:text="${tutor.sexo}"></span></p>
+
+	    <p><strong>Imagem:</strong> <span th:text="${tutor.urlImg}"></span></p>
+
+	    <div th:if="${erroExclusao}" class="alerta-erro" th:text="${erroExclusao}"></div>
+
+    <a th:href="@{/tutor/editar}">Editar meus dados</a> |
+    <a th:href="@{/tutor/apagar}" onclick="return confirm('Deseja realmente apagar sua conta?')">Apagar conta</a> |
+    <a th:href="@{/home}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

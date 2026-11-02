@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Prontuários - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Prontuários</h1>
+    <p th:if="${#lists.isEmpty(prontuarios)}" class="lista-vazia">Nenhum prontuário cadastrado.</p>
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+    <a th:href="@{/prontuario/novo}">Cadastrar novo prontuário</a>
+    <br><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Médico</th>
+                <th>Pet</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="prontuario : ${prontuarios}">
+                <td th:text="${prontuario.dataFormatada}"></td>
+                <td th:text="${prontuario.descricao}"></td>
+                <td th:text="${prontuario.medico != null ? prontuario.medico.nome : 'Sem médico'}"></td>
+                <td th:text="${prontuario.historico != null && prontuario.historico.pet != null ? prontuario.historico.pet.nome : 'Sem pet'}"></td>
+                <td>
+                    <a th:href="@{/prontuario/detalhes/{id}(id=${prontuario.id})}">Detalhes</a><span th:if="${prontuario.historico != null and prontuario.historico.pet != null and prontuario.historico.pet.status.name() == 'ATIVO'}"> |
+                        <a th:href="@{/prontuario/editar/{id}(id=${prontuario.id})}">Editar</a> |
+                        <a th:href="@{/prontuario/remover/{id}(id=${prontuario.id})}">Remover</a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

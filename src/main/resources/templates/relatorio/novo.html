@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Novo Relatório - PetCore')}"></head>
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+    <h1>Cadastrar Relatório</h1>
+
+    <form th:action="@{/relatorio/cadastrar}" th:object="${relatorio}" method="post">
+        <div>
+            <label for="observacao">Observação:</label>
+            <textarea id="observacao" th:field="*{observacao}"></textarea>
+            <div th:if="${#fields.hasErrors('observacao')}" th:errors="*{observacao}"></div>
+        </div>
+
+        <div>
+            <label for="idHist">Pet do histórico:</label>
+            <select id="idHist" th:field="*{idHist}">
+                <option value="">Selecione um pet</option>
+                <option th:each="historico : ${historicosDisponiveis}" th:value="${historico.id}" th:text="${historico.pet.nome + ' — Tutor: ' + historico.pet.nomesTutores}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('idHist')}" th:errors="*{idHist}"></div>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <br>
+    <a th:href="@{/relatorio/listar}">Voltar</a>
+</div>
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Medicamento - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Medicamento</h1>
+
+    <p><strong>Nome:</strong> <span th:text="${medicamento.nome}"></span></p>
+    <p><strong>Dosagem:</strong> <span th:text="${medicamento.dosagem}"></span></p>
+
+    <a th:href="@{/medicamento/editar/{id}(id=${medicamento.id})}">Editar</a> |
+    <a th:href="@{/medicamento/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

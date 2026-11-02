@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Exame - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Exame</h1>
+
+    <p><strong>Nome:</strong> <span th:text="${exame.nome}"></span></p>
+    <p><strong>Data:</strong> <span th:text="${exame.dataFormatada}"></span></p>
+    <p><strong>Tipo:</strong> <span th:text="${exame.tipo}"></span></p>
+    <p><strong>Médico:</strong> <span th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></span></p>
+    <p><strong>Pet:</strong> <span th:text="${exame.pet != null ? exame.pet.nome : 'Sem pet'}"></span></p>
+    <p><strong>Prontuário:</strong> <span th:text="${exame.prontuario != null && exame.prontuario.historico != null && exame.prontuario.historico.pet != null ? 'Prontuário de ' + exame.prontuario.historico.pet.nome : 'Sem prontuário'}"></span></p>
+
+    <a th:if="${medico and exame.pet != null and exame.pet.status.name() == 'ATIVO'}" th:href="@{/exame/editar/{id}(id=${exame.id})}">Editar</a> |
+    <a th:href="@{/exame/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Prontuário - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Prontuário</h1>
+    <p><strong>Data:</strong> <span th:text="${prontuario.dataFormatada}"></span></p>
+    <p><strong>Descrição:</strong> <span th:text="${prontuario.descricao}"></span></p>
+    <p><strong>Médico:</strong> <span th:text="${prontuario.medico != null ? prontuario.medico.nome : 'Sem médico'}"></span></p>
+    <p><strong>Pet:</strong> <span th:text="${prontuario.historico != null && prontuario.historico.pet != null ? prontuario.historico.pet.nome : 'Sem pet'}"></span></p>
+
+    <h3>Exames</h3>
+    <ul>
+        <li th:each="exame : ${prontuario.exames}" th:text="${exame.removido ? 'Exame removido' : exame.nome}"></li>
+    </ul>
+
+    <h3>Receitas</h3>
+    <ul>
+        <li th:each="receita : ${prontuario.receitas}" th:text="${receita.removida ? 'Receita removida' : receita.nome}"></li>
+    </ul>
+
+    <span th:if="${prontuario.historico != null and prontuario.historico.pet != null and prontuario.historico.pet.status.name() == 'ATIVO'}"><a th:href="@{/prontuario/editar/{id}(id=${prontuario.id})}">Editar</a> | </span>
+    <a th:href="@{/prontuario/listar}">Voltar</a>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

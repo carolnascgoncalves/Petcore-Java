@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Novo Pet - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Cadastrar Pet</h1>
+
+	    <form th:action="@{/pet/cadastrar}" th:object="${pet}" method="post">
+
+	        <div>
+	            <label for="nome">Nome:</label>
+	            <input type="text" id="nome" th:field="*{nome}">
+	            <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+	        </div>
+
+	        <div>
+	            <label for="especie">Espécie:</label>
+	            <input type="text" id="especie" th:field="*{especie}">
+	            <div th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}"></div>
+	        </div>
+
+	        <div>
+	            <label for="raca">Raça:</label>
+	            <input type="text" id="raca" th:field="*{raca}">
+	            <div th:if="${#fields.hasErrors('raca')}" th:errors="*{raca}"></div>
+	        </div>
+
+	        <div>
+	            <label for="dataNasc">Data de nascimento:</label>
+	            <input type="date" id="dataNasc" th:field="*{dataNasc}">
+	            <div th:if="${#fields.hasErrors('dataNasc')}" th:errors="*{dataNasc}"></div>
+	        </div>
+
+	        <div>
+	            <label for="pelagem">Pelagem:</label>
+	            <input type="text" id="pelagem" th:field="*{pelagem}">
+	            <div th:if="${#fields.hasErrors('pelagem')}" th:errors="*{pelagem}"></div>
+	        </div>
+
+	        <div>
+	            <label for="porte">Porte:</label>
+	            <input type="text" id="porte" th:field="*{porte}">
+	            <div th:if="${#fields.hasErrors('porte')}" th:errors="*{porte}"></div>
+	        </div>
+
+	        <div>
+	            <label for="sexo">Sexo:</label>
+
+	            <select id="sexo" th:field="*{sexo}">
+	                <option value="">Selecione</option>
+	                <option th:each="sexo : ${T(br.com.fiap.petcore.model.SexoEnum).values()}"
+	                        th:value="${sexo}"
+	                        th:text="${sexo}">
+	                </option>
+	            </select>
+
+	            <div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
+	        </div>
+
+			<div>
+			
+			    <label for="urlImg">URL da imagem:</label>
+			    
+			    <input type="text" id="urlImg" th:field="*{urlImg}">
+			    
+			    <div th:if="${#fields.hasErrors('urlImg')}" th:errors="*{urlImg}"></div>
+			    
+			</div>
+
+	        <br>
+
+	        <button type="submit">Cadastrar</button>
+
+	    </form>
+
+	    <br>
+
+	    <a th:href="@{/pet/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Histórico - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Histórico</h1>
+
+    <p><strong>Data:</strong> <span th:text="${historico.dataFormatada}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${historico.status}"></span></p>
+    <p><strong>Pet:</strong> <span th:text="${historico.pet != null ? historico.pet.nome : 'Sem pet'}"></span></p>
+
+    <h2>Exames realizados</h2>
+
+    <p th:if="${#lists.isEmpty(examesRealizados)}">Nenhum exame foi realizado ainda.</p>
+
+    <div th:each="exame : ${examesRealizados}">
+        <p th:if="${exame.removido}"><strong>Exame removido</strong> — <span th:text="${exame.dataFormatada}"></span></p>
+        <div th:unless="${exame.removido}">
+            <p><strong><a th:href="@{/exame/detalhes/{id}(id=${exame.id})}" th:text="${exame.nome}"></a></strong> — <span th:text="${exame.dataFormatada}"></span></p>
+            <p><strong>Tipo:</strong> <span th:text="${exame.tipo}"></span></p>
+            <p><strong>Médico:</strong> <span th:text="${exame.medico != null ? exame.medico.nome : 'Sem médico'}"></span></p>
+        </div>
+    </div>
+
+    <h2>Receitas vencidas</h2>
+
+    <p th:if="${#lists.isEmpty(receitasVencidas)}">Nenhuma receita vencida.</p>
+
+    <div th:each="receita : ${receitasVencidas}">
+        <p th:if="${receita.removida}"><strong>Receita removida</strong> — <span th:text="${receita.dataFormatada}"></span></p>
+        <div th:unless="${receita.removida}">
+            <p><strong><a th:href="@{/receita/detalhes/{id}(id=${receita.id})}" th:text="${receita.nome}"></a></strong> — <span th:text="${receita.dataFormatada}"></span></p>
+            <p><strong>Validade:</strong> <span th:text="${receita.validade}"></span></p>
+            <p><strong>Médico:</strong> <span th:text="${receita.medico != null ? receita.medico.nome : 'Sem médico'}"></span></p>
+            <p><strong>Instrução:</strong> <span th:text="${receita.instrucao}"></span></p>
+            <p><strong>Medicamentos:</strong></p>
+            <p th:if="${#sets.isEmpty(receita.medicamentos)}">Nenhum medicamento registrado.</p>
+            <ul th:unless="${#sets.isEmpty(receita.medicamentos)}">
+                <li th:each="medicamento : ${receita.medicamentos}" th:text="${medicamento.nome + ' — ' + medicamento.dosagem}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <a th:href="@{/historico/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

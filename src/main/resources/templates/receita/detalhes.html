@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes da Receita - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes da Receita</h1>
+
+    <p><strong>Nome:</strong> <span th:text="${receita.nome}"></span></p>
+    <p><strong>Descrição:</strong> <span th:text="${receita.descricao}"></span></p>
+    <p><strong>Instrução:</strong> <span th:text="${receita.instrucao}"></span></p>
+    <p><strong>Data:</strong> <span th:text="${receita.dataFormatada}"></span></p>
+    <p><strong>Validade:</strong> <span th:text="${receita.validade}"></span></p>
+    <p><strong>Pet:</strong> <span th:text="${receita.pet != null ? receita.pet.nome : 'Sem pet'}"></span></p>
+    <p><strong>Médico:</strong> <span th:text="${receita.medico != null ? receita.medico.nome : 'Sem médico'}"></span></p>
+
+    <h3>Medicamentos</h3>
+
+    <ul>
+        <li th:each="medicamento : ${receita.medicamentos}" th:text="${medicamento.nome + ' — ' + medicamento.dosagem}"></li>
+    </ul>
+
+    <a th:href="@{/receita/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

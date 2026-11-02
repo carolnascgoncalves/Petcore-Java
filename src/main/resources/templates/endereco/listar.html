@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Endereços - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Endereços</h1>
+
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+	    <a th:href="@{/endereco/novo}">Cadastrar novo endereço</a>
+
+	    <br><br>
+
+	    <table border="1">
+
+	        <thead>
+
+	            <tr>
+	                <th>CEP</th>
+	                <th>Complemento</th>
+	                <th>Ações</th>
+	            </tr>
+
+	        </thead>
+
+	        <tbody>
+
+	            <tr th:each="endereco : ${enderecos}">
+
+	                <td th:text="${endereco.cep}"></td>
+	                <td th:text="${endereco.complemento}"></td>
+
+	                <td>
+	                    <a th:href="@{/endereco/detalhes/{id}(id=${endereco.id})}">Detalhes</a> |
+	                    <a th:href="@{/endereco/editar/{id}(id=${endereco.id})}">Editar</a> |
+	                    <a th:href="@{/endereco/remover/{id}(id=${endereco.id})}">Remover</a>
+	                </td>
+
+	            </tr>
+
+	        </tbody>
+
+	    </table>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

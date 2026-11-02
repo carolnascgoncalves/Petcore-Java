@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Detalhes do Endereço - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Detalhes do Endereço</h1>
+
+	    <p><strong>CEP:</strong> <span th:text="${endereco.cep}"></span></p>
+	    <p><strong>Complemento:</strong> <span th:text="${endereco.complemento}"></span></p>
+
+	    <a th:href="@{/endereco/editar/{id}(id=${endereco.id})}">Editar</a> |
+	    <a th:href="@{/endereco/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

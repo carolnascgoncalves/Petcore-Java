@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Home - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>PetCore</h1>
+
+    <ul class="home-opcoes" th:if="${tutor}">
+        <li><a th:href="@{/tutor/minha-conta}">Minha conta</a></li>
+        <li><a th:href="@{/pet/listar}">Pets</a></li>
+        <li><a th:href="@{/historico/listar}">Históricos</a></li>
+        <li><a th:href="@{/exame/listar}">Exames</a></li>
+        <li><a th:href="@{/receita/listar}">Receitas</a></li>
+    </ul>
+
+    <ul class="home-opcoes" th:if="${medico}">
+        <li><a th:href="@{/medico/minha-conta}">Minha conta</a></li>
+        <li><a th:href="@{/pet/listar}">Pets</a></li>
+        <li><a th:href="@{/clinica/listar}">Clínicas</a></li>
+        <li><a th:href="@{/medicamento/listar}">Medicamentos</a></li>
+        <li><a th:href="@{/historico/listar}">Históricos</a></li>
+        <li><a th:href="@{/exame/listar}">Exames</a></li>
+        <li><a th:href="@{/prontuario/listar}">Prontuários</a></li>
+        <li><a th:href="@{/receita/listar}">Receitas</a></li>
+        <li><a th:href="@{/relatorio/listar}">Relatórios</a></li>
+    </ul>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

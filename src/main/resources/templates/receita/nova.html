@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Nova Receita - PetCore')}"></head>
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+    <h1>Cadastrar Receita</h1>
+
+    <form th:action="@{/receita/cadastrar}" th:object="${receita}" method="post">
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}">
+            <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" th:field="*{descricao}"></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        </div>
+
+        <div>
+            <label for="instrucao">Instrução:</label>
+            <textarea id="instrucao" th:field="*{instrucao}"></textarea>
+            <div th:if="${#fields.hasErrors('instrucao')}" th:errors="*{instrucao}"></div>
+        </div>
+
+        <div>
+            <label for="validade">Validade:</label>
+            <input type="date" id="validade" th:field="*{validade}">
+            <div th:if="${#fields.hasErrors('validade')}" th:errors="*{validade}"></div>
+        </div>
+
+        <div>
+            <label for="idPet">Pet:</label>
+            <select id="idPet" th:field="*{idPet}">
+                <option value="">Selecione um pet</option>
+                <option th:each="pet : ${petsAtivos}" th:value="${pet.id}" th:text="${pet.nome + ' — Tutor: ' + pet.nomesTutores}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('idPet')}" th:errors="*{idPet}"></div>
+        </div>
+
+        <div>
+            <label for="quantidadeMedicamentos">Quantidade de medicamentos:</label>
+            <input type="number" id="quantidadeMedicamentos" th:field="*{quantidadeMedicamentos}" min="1" th:max="${#lists.size(medicamentosDisponiveis)}">
+            <div th:if="${#fields.hasErrors('quantidadeMedicamentos')}" th:errors="*{quantidadeMedicamentos}"></div>
+        </div>
+
+        <div>
+            <p><strong>Medicamentos disponíveis:</strong></p>
+            <div th:if="${#lists.isEmpty(medicamentosDisponiveis)}">Nenhum medicamento cadastrado.</div>
+            <select id="modeloMedicamentos" hidden>
+                <option th:each="medicamento : ${medicamentosDisponiveis}" th:value="${medicamento.id}" th:text="${medicamento.nome + ' — ' + medicamento.dosagem}"></option>
+            </select>
+            <div id="selecoesMedicamentos"></div>
+            <div th:if="${#fields.hasErrors('idMedicamentos')}" th:errors="*{idMedicamentos}"></div>
+            <a th:href="@{/medicamento/novo}">Cadastrar um medicamento</a>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <br>
+    <a th:href="@{/receita/listar}">Voltar</a>
+</div>
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+<script>
+    const quantidade = document.getElementById('quantidadeMedicamentos');
+    const containerMedicamentos = document.getElementById('selecoesMedicamentos');
+    const modeloMedicamentos = document.getElementById('modeloMedicamentos');
+
+    function montarSelecoes() {
+        containerMedicamentos.innerHTML = '';
+        const total = parseInt(quantidade.value) || 0;
+
+        for (let i = 0; i < total; i++) {
+            const div = document.createElement('div');
+            const label = document.createElement('label');
+            label.textContent = 'Medicamento ' + (i + 1) + ': ';
+
+            const select = document.createElement('select');
+            select.name = 'idMedicamentos';
+            select.required = true;
+            select.addEventListener('change', atualizarOpcoes);
+
+            const vazio = document.createElement('option');
+            vazio.value = '';
+            vazio.textContent = 'Selecione';
+            select.appendChild(vazio);
+
+            Array.from(modeloMedicamentos.options).forEach(opcao => select.appendChild(opcao.cloneNode(true)));
+            div.appendChild(label);
+            div.appendChild(select);
+            containerMedicamentos.appendChild(div);
+        }
+    }
+
+    function atualizarOpcoes() {
+        const selects = Array.from(containerMedicamentos.querySelectorAll('select'));
+        const selecionados = selects.map(select => select.value).filter(valor => valor !== '');
+
+        selects.forEach(select => {
+            Array.from(select.options).forEach(opcao => {
+                if (opcao.value === '') return;
+                opcao.disabled = opcao.value !== select.value && selecionados.includes(opcao.value);
+            });
+        });
+    }
+
+    quantidade.addEventListener('input', montarSelecoes);
+    montarSelecoes();
+</script>
+
+</body>
+</html>

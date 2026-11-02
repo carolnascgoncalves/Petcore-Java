@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do Pet - PetCore')}"></head>
+
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Detalhes do Pet</h1>
+
+    <p><strong>Nome:</strong> <span th:text="${pet.nome}"></span></p>
+    <p><strong>Espécie:</strong> <span th:text="${pet.especie}"></span></p>
+    <p><strong>Raça:</strong> <span th:text="${pet.raca}"></span></p>
+    <p><strong>Data de nascimento:</strong> <span th:text="${pet.dataNascimento}"></span></p>
+    <p><strong>Idade:</strong> <span th:text="${pet.calcularIdade()}"></span></p>
+    <p><strong>Pelagem:</strong> <span th:text="${pet.pelagem}"></span></p>
+    <p><strong>Porte:</strong> <span th:text="${pet.porte}"></span></p>
+    <p><strong>Sexo:</strong> <span th:text="${pet.sexo}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${pet.status}"></span></p>
+    <p><strong>Imagem:</strong> <span th:text="${pet.urlImg}"></span></p>
+    <p><strong>Histórico:</strong> <a th:if="${pet.historico != null}" th:href="@{/historico/detalhes/{id}(id=${pet.historico.id})}">Ver histórico</a><span th:if="${pet.historico == null}">Sem histórico</span></p>
+
+    <h3>Exames agendados</h3>
+    <p th:if="${#lists.isEmpty(examesAgendados)}">Nenhum exame agendado.</p>
+    <ul th:unless="${#lists.isEmpty(examesAgendados)}">
+        <li th:each="exame : ${examesAgendados}">
+            <a th:href="@{/exame/detalhes/{id}(id=${exame.id})}" th:text="${exame.nome}"></a>
+            <span th:text="${' - ' + exame.dataFormatada}"></span>
+        </li>
+    </ul>
+
+    <h3>Receitas ativas</h3>
+    <p th:if="${#lists.isEmpty(receitasAtivas)}">Nenhuma receita ativa.</p>
+    <ul th:unless="${#lists.isEmpty(receitasAtivas)}">
+        <li th:each="receita : ${receitasAtivas}">
+            <a th:href="@{/receita/detalhes/{id}(id=${receita.id})}" th:text="${receita.nome}"></a>
+            <span th:text="${' - validade: ' + receita.validade}"></span>
+        </li>
+    </ul>
+
+    <span th:if="${tutor and pet.status.name() == 'ATIVO'}">
+        <a th:href="@{/pet/editar/status/{id}(id=${pet.id})}">Alterar status</a> |
+        <a th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}">Editar imagem</a> |
+    </span>
+    <a th:href="@{/pet/listar}">Voltar</a>
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

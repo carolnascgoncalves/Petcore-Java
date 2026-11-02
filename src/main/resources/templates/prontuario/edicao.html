@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Editar Prontuário - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Editar Prontuário</h1>
+
+    <form th:action="@{/prontuario/atualizar/{id}(id=${id})}" th:object="${prontuario}" method="post">
+
+        <div>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" th:field="*{descricao}"></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        </div>
+
+        <br>
+
+        <button type="submit">Salvar alterações</button>
+
+    </form>
+
+    <br>
+
+    <a th:href="@{/prontuario/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

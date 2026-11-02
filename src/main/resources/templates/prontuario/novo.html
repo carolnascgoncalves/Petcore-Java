@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Novo Prontuário - PetCore')}"></head>
+<body>
+<div class="container">
+    <div th:replace="~{fragmentos :: menu}"></div>
+    <h1>Cadastrar Prontuário</h1>
+
+    <form th:action="@{/prontuario/cadastrar}" th:object="${prontuario}" method="post">
+        <div>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" th:field="*{descricao}"></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+        </div>
+
+        <div>
+            <label for="idHistorico">Pet do histórico:</label>
+            <select id="idHistorico" th:field="*{idHistorico}">
+                <option value="">Selecione um pet</option>
+                <option th:each="historico : ${historicosDisponiveis}" th:value="${historico.id}" th:text="${historico.pet.nome + ' — Tutor: ' + historico.pet.nomesTutores}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('idHistorico')}" th:errors="*{idHistorico}"></div>
+        </div>
+
+        <div>
+            <label for="idExames">Exames (opcional):</label>
+            <select id="idExames" th:field="*{idExames}" multiple>
+                <option th:each="exame : ${examesDisponiveis}" th:value="${exame.id}" th:text="${exame.nome + ' — Pet: ' + exame.pet.nome}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('idExames')}" th:errors="*{idExames}"></div>
+        </div>
+
+        <div>
+            <label for="idReceitas">Receitas (opcional):</label>
+            <select id="idReceitas" th:field="*{idReceitas}" multiple>
+                <option th:each="receita : ${receitasDisponiveis}" th:value="${receita.id}" th:text="${receita.nome + ' — Pet: ' + receita.pet.nome}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('idReceitas')}" th:errors="*{idReceitas}"></div>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <br>
+    <a th:href="@{/prontuario/listar}">Voltar</a>
+</div>
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
+</html>

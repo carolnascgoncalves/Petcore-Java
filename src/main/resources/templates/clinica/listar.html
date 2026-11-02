@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Clínicas - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Clínicas</h1>
+
+    <p th:if="${#lists.isEmpty(clinicas)}" class="lista-vazia">Nenhuma clínica cadastrada.</p>
+
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+	    <a th:href="@{/clinica/nova}">Cadastrar nova clínica</a>
+
+	    <br><br>
+
+	    <table border="1">
+
+	        <thead>
+
+	            <tr>
+	                <th>Nome</th>
+	                <th>CNPJ</th>
+	                <th>Ações</th>
+	            </tr>
+
+	        </thead>
+
+	        <tbody>
+
+	            <tr th:each="clinica : ${clinicas}">
+
+	                <td th:text="${clinica.nome}"></td>
+	                <td th:text="${clinica.cnpj}"></td>
+
+	                <td>
+	                    <a th:href="@{/clinica/detalhes/{id}(id=${clinica.id})}">Detalhes</a> |
+	                    <a th:href="@{/clinica/editar/{id}(id=${clinica.id})}">Editar</a> |
+	                    <a th:href="@{/clinica/remover/{id}(id=${clinica.id})}">Remover</a>
+	                </td>
+
+	            </tr>
+
+	        </tbody>
+
+	    </table>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

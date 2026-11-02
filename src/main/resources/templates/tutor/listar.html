@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Tutores - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Tutores</h1>
+
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+	    <a th:href="@{/tutor/novo}">Cadastrar novo tutor</a>
+
+	    <br><br>
+
+	    <table border="1">
+
+	        <thead>
+	            <tr>
+
+
+	                <th>Nome</th>
+
+	                <th>Email</th>
+
+	                <th>Telefone</th>
+
+	                <th>Sexo</th>
+
+	                <th>Ações</th>
+	            </tr>
+
+	        </thead>
+
+	        <tbody>
+
+	            <tr th:each="tutor : ${tutores}">
+
+
+	                <td th:text="${tutor.nome}"></td>
+
+	                <td th:text="${tutor.email}"></td>
+
+	                <td th:text="${tutor.telefone}"></td>
+
+	                <td th:text="${tutor.sexo}"></td>
+
+	                <td>
+	                    <a th:href="@{/tutor/detalhes/{id}(id=${tutor.id})}">Detalhes</a> |
+	                    <a th:href="@{/tutor/editar/{id}(id=${tutor.id})}">Editar</a> |
+	                    <a th:href="@{/tutor/remover/{id}(id=${tutor.id})}">Remover</a>
+	                </td>
+
+	            </tr>
+	        </tbody>
+	    </table>
+	</div>
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+	</body>
+
+</html>

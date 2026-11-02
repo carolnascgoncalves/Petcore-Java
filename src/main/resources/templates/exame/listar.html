@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Exames - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Exames</h1>
+
+    <p th:if="${#lists.isEmpty(exames)}" class="lista-vazia">Nenhum exame agendado.</p>
+
+    <a th:if="${medico}" th:href="@{/exame/novo}">Cadastrar novo exame</a>
+
+    <br><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Nome</th>
+                <th>Pet</th>
+                <th>Tipo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="exame : ${exames}">
+                <td th:text="${exame.dataFormatada}"></td>
+                <td th:text="${exame.nome}"></td>
+                <td th:text="${exame.pet != null ? exame.pet.nome : 'Sem pet'}"></td>
+                <td th:text="${exame.tipo}"></td>
+                <td>
+                    <a th:href="@{/exame/detalhes/{id}(id=${exame.id})}">Detalhes</a><span th:if="${medico and exame.pet != null and exame.pet.status.name() == 'ATIVO'}"> |
+                        <a th:href="@{/exame/editar/{id}(id=${exame.id})}">Editar</a> |
+                        <a th:href="@{/exame/remover/{id}(id=${exame.id})}">Remover</a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

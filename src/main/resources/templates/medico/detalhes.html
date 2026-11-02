@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Detalhes do Médico - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Detalhes do Médico</h1>
+<p><strong>Nome:</strong> <span th:text="${medico.nome}"></span></p>
+
+	    <p><strong>Data de nascimento:</strong> <span th:text="${medico.dataNascimento}"></span></p>
+
+	    <p><strong>Telefone:</strong> <span th:text="${medico.telefone}"></span></p>
+
+	    <p><strong>Email:</strong> <span th:text="${medico.email}"></span></p>
+
+	    <p><strong>Sexo:</strong> <span th:text="${medico.sexo}"></span></p>
+
+	    <p><strong>Especialidade:</strong> <span th:text="${medico.especialidade}"></span></p>
+
+	    <p><strong>Imagem:</strong> <span th:text="${medico.urlImg}"></span></p>
+
+	    <div th:if="${erroExclusao}" class="alerta-erro" th:text="${erroExclusao}"></div>
+
+    <a th:href="@{/medico/editar}">Editar meus dados</a> |
+    <a th:href="@{/medico/apagar}" onclick="return confirm('Deseja realmente apagar sua conta?')">Apagar conta</a> |
+    <a th:href="@{/home}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Novo Tutor - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Cadastrar Tutor</h1>
+
+	    <form th:action="@{/tutor/cadastrar}" th:object="${tutor}" method="post">
+
+	        <div>
+	        
+			    <label for="nome">Nome:</label>
+			    
+			    <input type="text" id="nome" th:field="*{nome}">
+			    
+			    <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+			    
+			</div>
+			
+			<div>
+			
+			    <label for="dataNascimento">Data de nascimento:</label>
+			    
+				<input type="date" id="dataNascimento" th:field="*{dataNascimento}">
+				
+				<div th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
+			    
+			</div>
+			
+			<div>
+			
+			    <label for="telefone">Telefone:</label>
+			    
+			    <input type="text" id="telefone" th:field="*{telefone}" maxlength="11">
+			    
+			    <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+			    
+			</div>
+
+	        <div>
+
+	            <label for="email">Email:</label>
+
+	            <input type="email" id="email" th:field="*{email}">
+
+	            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+	        </div>
+
+	        <div>
+
+	            <label for="sexo">Sexo:</label>
+
+	            <select id="sexo" th:field="*{sexo}">
+
+	                <option value="">Selecione</option>
+
+	                <option th:each="sexo : ${T(br.com.fiap.petcore.model.SexoEnum).values()}"
+	                        th:value="${sexo}"
+	                        th:text="${sexo}">
+	                </option>
+
+	            </select>
+
+	            <div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
+
+	        </div>
+
+			<div>
+			
+			    <label for="senha">Senha:</label>
+			    
+			    <input type="password" id="senha" th:field="*{senha}">
+			    
+			    <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+			    
+			</div>
+
+	        <br>
+
+	        <button type="submit">Cadastrar</button>
+
+	    </form>
+
+	    <br>
+
+	    <a th:href="@{/login}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Históricos - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Históricos</h1>
+
+    <p th:if="${#lists.isEmpty(historicos)}" class="lista-vazia">Nenhum histórico cadastrado.</p>
+
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Pet</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="historico : ${historicos}">
+                <td th:text="${historico.dataFormatada}"></td>
+                <td th:text="${historico.status}"></td>
+                <td th:text="${historico.pet != null ? historico.pet.nome : 'Sem pet'}"></td>
+                <td>
+                    <a th:href="@{/historico/detalhes/{id}(id=${historico.id})}">Detalhes</a><span th:if="${medico}"> | <a th:href="@{/historico/remover/{id}(id=${historico.id})}">Remover</a></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

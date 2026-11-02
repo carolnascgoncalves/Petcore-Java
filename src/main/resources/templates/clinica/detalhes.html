@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Detalhes da Clínica - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Detalhes da Clínica</h1>
+
+	    <p><strong>Nome:</strong> <span th:text="${clinica.nome}"></span></p>
+	    <p><strong>CNPJ:</strong> <span th:text="${clinica.cnpj}"></span></p>
+	    <p><strong>CEP:</strong> <span th:text="${clinica.endereco != null ? clinica.endereco.cep : 'Sem endereço'}"></span></p>
+        <p><strong>Complemento:</strong> <span th:text="${clinica.endereco != null && clinica.endereco.complemento != null ? clinica.endereco.complemento : 'Sem complemento'}"></span></p>
+
+	    <a th:href="@{/clinica/editar/{id}(id=${clinica.id})}">Editar</a> |
+	    <a th:href="@{/clinica/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Editar Imagem - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Editar Imagem do Pet</h1>
+
+	    <form th:action="@{/pet/atualizar/imagem/{id}(id=${id})}" th:object="${pet}" method="post">
+
+	        <div>
+	            <label for="urlImg">URL da imagem:</label>
+	            <input type="text" id="urlImg" th:field="*{urlImg}">
+	            <div th:if="${#fields.hasErrors('urlImg')}" th:errors="*{urlImg}"></div>
+	        </div>
+
+	        <br>
+
+	        <button type="submit">Salvar</button>
+
+	    </form>
+
+	    <br>
+
+	    <a th:href="@{/pet/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Médicos - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Médicos</h1>
+
+    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+	    <a th:href="@{/medico/novo}">Cadastrar novo médico</a>
+
+	    <br><br>
+
+	    <table border="1">
+
+	        <thead>
+
+	            <tr>
+
+
+	                <th>Nome</th>
+
+	                <th>Email</th>
+
+	                <th>Telefone</th>
+
+	                <th>Especialidade</th>
+
+	                <th>Ações</th>
+
+	            </tr>
+
+	        </thead>
+
+	        <tbody>
+
+	            <tr th:each="medico : ${medicos}">
+
+
+	                <td th:text="${medico.nome}"></td>
+
+	                <td th:text="${medico.email}"></td>
+
+	                <td th:text="${medico.telefone}"></td>
+
+	                <td th:text="${medico.especialidade}"></td>
+
+	                <td>
+
+	                    <a th:href="@{/medico/detalhes/{id}(id=${medico.id})}">Detalhes</a>
+
+	                    |
+
+	                    <a th:href="@{/medico/editar/{id}(id=${medico.id})}">Editar</a>
+
+	                    |
+
+	                    <a th:href="@{/medico/remover/{id}(id=${medico.id})}">Remover</a>
+
+	                </td>
+
+	            </tr>
+
+	        </tbody>
+
+	    </table>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>

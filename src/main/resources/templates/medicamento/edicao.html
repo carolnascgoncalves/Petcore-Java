@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos :: cabecalho('Editar Medicamento - PetCore')}"></head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragmentos :: menu}"></div>
+
+    <h1>Editar Medicamento</h1>
+
+    <form th:action="@{/medicamento/atualizar/{id}(id=${id})}" th:object="${medicamento}" method="post">
+        <div>
+            <label for="dosagem">Dosagem:</label>
+            <input type="text" id="dosagem" th:field="*{dosagem}">
+            <div th:if="${#fields.hasErrors('dosagem')}" th:errors="*{dosagem}"></div>
+        </div>
+
+        <br>
+
+        <button type="submit">Salvar alterações</button>
+
+    </form>
+
+    <br>
+
+    <a th:href="@{/medicamento/listar}">Voltar</a>
+
+</div>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+</body>
+</html>

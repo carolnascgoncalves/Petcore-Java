@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="~{fragmentos :: cabecalho('Editar Endereço - PetCore')}"></head>
+
+	<body>
+
+	<div class="container">
+
+	    <div th:replace="~{fragmentos :: menu}"></div>
+
+	    <h1>Editar Endereço</h1>
+
+	    <form th:action="@{/endereco/atualizar/{id}(id=${id})}" th:object="${endereco}" method="post">
+
+	        <div>
+	            <label for="cep">CEP:</label>
+	            <input type="text" id="cep" th:field="*{cep}">
+	            <div th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}"></div>
+	        </div>
+
+	        <div>
+	            <label for="complemento">Complemento:</label>
+	            <input type="text" id="complemento" th:field="*{complemento}">
+	            <div th:if="${#fields.hasErrors('complemento')}" th:errors="*{complemento}"></div>
+	        </div>
+
+	        <br>
+
+	        <button type="submit">Salvar alterações</button>
+
+	    </form>
+
+	    <br>
+
+	    <a th:href="@{/endereco/listar}">Voltar</a>
+
+	</div>
+
+	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+
+	</body>
+
+</html>
