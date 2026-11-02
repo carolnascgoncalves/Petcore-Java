@@ -1,6 +1,9 @@
 package br.com.fiap.petcore.control;
 
-import java.util.ArrayList;
+import java.util.ArrayList;import java.io.IOException;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import br.com.fiap.petcore.service.ImagemPetService;
 import java.util.HashSet;
 import java.util.Set;
 import br.com.fiap.petcore.service.procedure.ProcedurePetService;
@@ -41,6 +44,9 @@ public class PetResource {
 
     @Autowired
     private TutorService tutorService;
+    
+    @Autowired
+    private ImagemPetService imagemPetService;
 
 
 @GetMapping("/pet/listar")
@@ -93,7 +99,7 @@ public ModelAndView listarPets(Authentication authentication) {
     }
 
     @PostMapping("/pet/cadastrar")
-    public ModelAndView cadastrarPet(@Valid @ModelAttribute("pet") PetRequest petRequest,BindingResult bd,Authentication authentication) {
+    public ModelAndView cadastrarPet(@Valid @ModelAttribute("pet") PetRequest petRequest,BindingResult bd, @RequestParam(value = "imagem", required = false) MultipartFile imagem,Authentication authentication) {
         var tutor = tutorService.fetchByEmail(authentication.getName());
 
         if (tutor.isEmpty()) {
@@ -105,6 +111,16 @@ public ModelAndView listarPets(Authentication authentication) {
         }
 
         Pet pet = PetRequest.toEntity(petRequest);
+
+        try {
+            if (imagem != null && !imagem.isEmpty()) {
+                pet.setUrlImg(imagemPetService.salvar(imagem));
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            bd.reject("imagem.invalida", e.getMessage());
+            return new ModelAndView("/pet/novo");
+        }
+
         Pet petSalvo = petService.create(pet);
         tutorService.associatePet(tutor.get().getId(), petSalvo);
 
@@ -174,13 +190,20 @@ public ModelAndView listarPets(Authentication authentication) {
 
     @GetMapping("/pet/editar/imagem/{id}")
     public ModelAndView retornarPaginaEdicaoImagem(@PathVariable Long id,Authentication authentication) {
-        if (!petPertenceAoTutor(id, authentication)) return new ModelAndView("redirect:/pet/listar");
+
+        if (!petPertenceAoTutor(id, authentication)) {
+            return new ModelAndView("redirect:/pet/listar");
+        }
+
         Optional<Pet> op = petService.fetchById(id);
 
         if (op.isPresent()) {
-            if (op.get().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/pet/detalhes/" + id);
+            if (op.get().getStatus() == StatusEnum.INATIVO) {
+                return new ModelAndView("redirect:/pet/detalhes/" + id);
+            }
+
             ModelAndView mv = new ModelAndView("/pet/edicao_imagem");
-            mv.addObject("pet", PetImgRequest.toDto(op.get()));
+            mv.addObject("pet", op.get());
             mv.addObject("id", id);
 
             return mv;
@@ -190,20 +213,34 @@ public ModelAndView listarPets(Authentication authentication) {
     }
 
     @PostMapping("/pet/atualizar/imagem/{id}")
-    public ModelAndView atualizarImagem(@PathVariable Long id,@Valid @ModelAttribute("pet") PetImgRequest dadosDto,BindingResult bd,Authentication authentication) {
-        if (!petPertenceAoTutor(id, authentication)) return new ModelAndView("redirect:/pet/listar");
-        Optional<Pet> petAtual = petService.fetchById(id);
-        if (petAtual.isEmpty() || petAtual.get().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/pet/detalhes/" + id);
-        if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/pet/edicao_imagem");
-            mv.addObject("id", id);
-
-            return mv;
+    public ModelAndView atualizarImagem(@PathVariable Long id,@RequestParam("imagem") MultipartFile imagem,Authentication authentication) {
+        if (!petPertenceAoTutor(id, authentication)) {
+            return new ModelAndView("redirect:/pet/listar");
         }
 
-        petService.updateImage(id, PetImgRequest.toEntity(dadosDto));
+        Optional<Pet> petAtual = petService.fetchById(id);
 
-        return new ModelAndView("redirect:/pet/listar");
+        if (petAtual.isEmpty() || petAtual.get().getStatus() == StatusEnum.INATIVO) {
+            return new ModelAndView("redirect:/pet/detalhes/" + id);
+        }
+
+        if (imagem == null || imagem.isEmpty()) {
+            return new ModelAndView("redirect:/pet/editar/imagem/" + id + "?erro=sem-imagem");
+        }
+
+        try {
+            String caminho = imagemPetService.salvar(imagem);
+
+            Pet patch = new Pet();
+            patch.setUrlImg(caminho);
+
+            petService.updateImage(id, patch);
+
+        } catch (IOException | IllegalArgumentException e) {
+            return new ModelAndView("redirect:/pet/editar/imagem/" + id + "?erro=upload");
+        }
+
+        return new ModelAndView("redirect:/pet/detalhes/" + id);
     }
 
     private boolean petPertenceAoTutor(Long id,Authentication authentication) {

@@ -1,93 +1,166 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecalho('Cadastrar pet - PetCore')}"></head>
 
-	<head th:replace="~{fragmentos :: cabecalho('Novo Pet - PetCore')}"></head>
+<body>
 
-	<body>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-	<div class="container">
+<main class="pagina">
 
-	    <div th:replace="~{fragmentos :: menu}"></div>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">CADASTRO</span>
+            <h1>Novo integrante da família</h1>
+            <p>Preencha as informações para cadastrar seu pet.</p>
+        </div>
 
-	    <h1>Cadastrar Pet</h1>
+        <a th:href="@{/pet/listar}" class="botao botao-secundario">
+            <span>←</span> Voltar
+        </a>
+    </div>
 
-	    <form th:action="@{/pet/cadastrar}" th:object="${pet}" method="post">
+    <form th:action="@{/pet/cadastrar}"
+          th:object="${pet}"
+          method="post"
+          enctype="multipart/form-data"
+          class="formulario-card">
 
-	        <div>
-	            <label for="nome">Nome:</label>
-	            <input type="text" id="nome" th:field="*{nome}">
-	            <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-	        </div>
+        <div class="mensagem-erro" th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="erro : ${#fields.globalErrors()}" th:text="${erro}"></p>
+        </div>
 
-	        <div>
-	            <label for="especie">Espécie:</label>
-	            <input type="text" id="especie" th:field="*{especie}">
-	            <div th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}"></div>
-	        </div>
+        <section class="formulario-secao">
 
-	        <div>
-	            <label for="raca">Raça:</label>
-	            <input type="text" id="raca" th:field="*{raca}">
-	            <div th:if="${#fields.hasErrors('raca')}" th:errors="*{raca}"></div>
-	        </div>
+            <div class="secao-titulo">
+                <div>
+                    <h2>Foto do pet</h2>
+                    <p>Escolha uma foto para identificar seu companheiro.</p>
+                </div>
+            </div>
 
-	        <div>
-	            <label for="dataNasc">Data de nascimento:</label>
-	            <input type="date" id="dataNasc" th:field="*{dataNasc}">
-	            <div th:if="${#fields.hasErrors('dataNasc')}" th:errors="*{dataNasc}"></div>
-	        </div>
+            <div class="upload-area">
+                <div class="upload-preview" id="preview-container">
+                    <span id="preview-placeholder">🐾</span>
+                    <img id="preview-imagem" alt="Prévia da foto selecionada" hidden>
+                </div>
 
-	        <div>
-	            <label for="pelagem">Pelagem:</label>
-	            <input type="text" id="pelagem" th:field="*{pelagem}">
-	            <div th:if="${#fields.hasErrors('pelagem')}" th:errors="*{pelagem}"></div>
-	        </div>
+                <div class="upload-conteudo">
+                    <label for="imagem" class="botao botao-secundario">
+                        Escolher foto
+                    </label>
 
-	        <div>
-	            <label for="porte">Porte:</label>
-	            <input type="text" id="porte" th:field="*{porte}">
-	            <div th:if="${#fields.hasErrors('porte')}" th:errors="*{porte}"></div>
-	        </div>
+                    <input type="file"
+                           id="imagem"
+                           name="imagem"
+                           accept="image/png,image/jpeg,image/webp"
+                           class="input-arquivo">
 
-	        <div>
-	            <label for="sexo">Sexo:</label>
+                    <small>JPG, PNG ou WEBP. Máximo de 5 MB.</small>
+                    <span id="nome-arquivo" class="texto-arquivo">Nenhuma foto selecionada</span>
+                </div>
+            </div>
+        </section>
 
-	            <select id="sexo" th:field="*{sexo}">
-	                <option value="">Selecione</option>
-	                <option th:each="sexo : ${T(br.com.fiap.petcore.model.SexoEnum).values()}"
-	                        th:value="${sexo}"
-	                        th:text="${sexo}">
-	                </option>
-	            </select>
+        <section class="formulario-secao">
 
-	            <div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
-	        </div>
+            <div class="secao-titulo">
+                <div>
+                    <h2>Informações básicas</h2>
+                    <p>Conte um pouco sobre seu pet.</p>
+                </div>
+            </div>
 
-			<div>
-			
-			    <label for="urlImg">URL da imagem:</label>
-			    
-			    <input type="text" id="urlImg" th:field="*{urlImg}">
-			    
-			    <div th:if="${#fields.hasErrors('urlImg')}" th:errors="*{urlImg}"></div>
-			    
-			</div>
+            <div class="formulario-grid">
 
-	        <br>
+                <div class="campo campo-largo">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" th:field="*{nome}" placeholder="Ex.: Pipoca">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></small>
+                </div>
 
-	        <button type="submit">Cadastrar</button>
+                <div class="campo">
+                    <label for="especie">Espécie</label>
+                    <input type="text" id="especie" th:field="*{especie}" placeholder="Ex.: Cachorro">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}"></small>
+                </div>
 
-	    </form>
+                <div class="campo">
+                    <label for="raca">Raça</label>
+                    <input type="text" id="raca" th:field="*{raca}" placeholder="Ex.: Golden Retriever">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('raca')}" th:errors="*{raca}"></small>
+                </div>
 
-	    <br>
+                <div class="campo">
+                    <label for="dataNasc">Data de nascimento</label>
+                    <input type="date" id="dataNasc" th:field="*{dataNasc}">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('dataNasc')}" th:errors="*{dataNasc}"></small>
+                </div>
 
-	    <a th:href="@{/pet/listar}">Voltar</a>
+                <div class="campo">
+                    <label for="sexo">Sexo</label>
+                    <select id="sexo" th:field="*{sexo}">
+                        <option value="">Selecione</option>
+                        <option th:each="sexo : ${T(br.com.fiap.petcore.model.SexoEnum).values()}"
+                                th:value="${sexo}" th:text="${sexo}"></option>
+                    </select>
+                    <small class="erro-campo" th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></small>
+                </div>
 
-	</div>
+                <div class="campo">
+                    <label for="porte">Porte</label>
+                    <input type="text" id="porte" th:field="*{porte}" placeholder="Ex.: Médio">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('porte')}" th:errors="*{porte}"></small>
+                </div>
 
-	<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+                <div class="campo">
+                    <label for="pelagem">Pelagem</label>
+                    <input type="text" id="pelagem" th:field="*{pelagem}" placeholder="Ex.: Curta">
+                    <small class="erro-campo" th:if="${#fields.hasErrors('pelagem')}" th:errors="*{pelagem}"></small>
+                </div>
 
-	</body>
+            </div>
+        </section>
 
+        <div class="formulario-acoes">
+            <a th:href="@{/pet/listar}" class="botao botao-secundario">Cancelar</a>
+            <button type="submit" class="botao botao-principal">Cadastrar pet</button>
+        </div>
+
+    </form>
+
+</main>
+
+<script>
+    const campoImagem = document.getElementById("imagem");
+    const previewImagem = document.getElementById("preview-imagem");
+    const placeholder = document.getElementById("preview-placeholder");
+    const nomeArquivo = document.getElementById("nome-arquivo");
+
+    campoImagem.addEventListener("change", function () {
+        const arquivo = this.files[0];
+
+        if (!arquivo) {
+            previewImagem.hidden = true;
+            placeholder.hidden = false;
+            nomeArquivo.textContent = "Nenhuma foto selecionada";
+            return;
+        }
+
+        if (arquivo.size > 5 * 1024 * 1024) {
+            alert("A imagem deve ter no máximo 5 MB.");
+            this.value = "";
+            return;
+        }
+
+        previewImagem.src = URL.createObjectURL(arquivo);
+        previewImagem.hidden = false;
+        placeholder.hidden = true;
+        nomeArquivo.textContent = arquivo.name;
+    });
+</script>
+
+<script th:replace="~{fragmentos :: bootstrap-script}"></script>
+</body>
 </html>

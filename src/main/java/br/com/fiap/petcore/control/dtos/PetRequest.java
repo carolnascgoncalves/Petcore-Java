@@ -2,7 +2,6 @@ package br.com.fiap.petcore.control.dtos;
 
 import java.time.LocalDate;
 
-import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -28,9 +27,6 @@ public class PetRequest {
     @NotNull(message = "O sexo é obrigatório")
     private SexoEnum sexo;
 
-    @URL(message = "A URL da imagem deve ser válida")
-    private String urlImg;
-
     @NotEmpty(message = "O porte é obrigatório")
     @Size(min = 5, max = 25, message = "O porte deve ter entre 5 e 25 caracteres")
     private String porte;
@@ -53,7 +49,6 @@ public class PetRequest {
         pet.setNome(dto.getNome());
         pet.setDataNascimento(dto.getDataNasc());
         pet.setSexo(dto.getSexo());
-        pet.setUrlImg(dto.getUrlImg());
         pet.setStatus(StatusEnum.ATIVO);
         pet.setPorte(dto.getPorte());
         pet.setEspecie(dto.getEspecie());
@@ -61,21 +56,6 @@ public class PetRequest {
         pet.setPelagem(dto.getPelagem());
 
         return pet;
-    }
-
-    public static PetRequest toDto(final Pet pet) {
-        PetRequest petDto = new PetRequest();
-
-        petDto.setNome(pet.getNome());
-        petDto.setDataNasc(pet.getDataNascimento());
-        petDto.setSexo(pet.getSexo());
-        petDto.setUrlImg(pet.getUrlImg());
-        petDto.setPorte(pet.getPorte());
-        petDto.setEspecie(pet.getEspecie());
-        petDto.setRaca(pet.getRaca());
-        petDto.setPelagem(pet.getPelagem());
-
-        return petDto;
     }
 
     public String getNome() {
@@ -100,14 +80,6 @@ public class PetRequest {
 
     public void setSexo(SexoEnum sexo) {
         this.sexo = sexo;
-    }
-
-    public String getUrlImg() {
-        return urlImg;
-    }
-
-    public void setUrlImg(String urlImg) {
-        this.urlImg = urlImg;
     }
 
     public String getPorte() {

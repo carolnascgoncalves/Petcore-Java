@@ -1,46 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos :: cabecalho('Pets - PetCore')}"></head>
 
 <body>
-<div class="container">
-    <div th:replace="~{fragmentos :: menu}"></div>
 
-    <h1>Pets</h1>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <p th:if="${#lists.isEmpty(pets)}" class="lista-vazia">Nenhum pet cadastrado.</p>
-    <div th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+<main class="pagina">
 
-    <a th:if="${tutor}" th:href="@{/pet/novo}">Cadastrar novo pet</a>
-    <br><br>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">ÁREA DE CUIDADOS</span>
+            <h1>Pets</h1>
+            <p>Visualize e acompanhe os animais cadastrados no PetCore.</p>
+        </div>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Espécie</th>
-                <th>Raça</th>
-                <th>Status</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="pet : ${pets}">
-                <td th:text="${pet.nome}"></td>
-                <td th:text="${pet.especie}"></td>
-                <td th:text="${pet.raca}"></td>
-                <td th:text="${pet.status}"></td>
-                <td>
-                    <a th:href="@{/pet/detalhes/{id}(id=${pet.id})}">Detalhes</a><span th:if="${tutor and pet.status.name() == 'ATIVO'}"> |
-                        <a th:href="@{/pet/editar/status/{id}(id=${pet.id})}">Alterar status</a> |
-                        <a th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}">Editar imagem</a>
+        <a th:if="${tutor}" th:href="@{/pet/novo}" class="botao botao-principal">
+            + Cadastrar pet
+        </a>
+    </div>
+
+    <div class="mensagem-erro" th:if="${erroExclusao}" th:text="${erroExclusao}"></div>
+
+    <div th:if="${#lists.isEmpty(pets)}" class="estado-vazio">
+        <div class="estado-vazio-icone">🐾</div>
+        <h2>Nenhum pet por aqui ainda</h2>
+        <p>Quando houver pets cadastrados, eles aparecerão nesta página.</p>
+        <a th:if="${tutor}" th:href="@{/pet/novo}" class="botao botao-principal">
+            Cadastrar primeiro pet
+        </a>
+    </div>
+
+    <section class="pets-grid" th:unless="${#lists.isEmpty(pets)}">
+
+        <article class="pet-card" th:each="pet : ${pets}">
+
+            <div class="pet-card-foto">
+                <img th:if="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                     th:src="${pet.urlImg}"
+                     th:alt="${'Foto de ' + pet.nome}">
+
+                <div th:unless="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                     class="foto-placeholder">
+                    🐾
+                </div>
+            </div>
+
+            <div class="pet-card-conteudo">
+
+                <div class="pet-card-titulo">
+                    <div>
+                        <h2 th:text="${pet.nome}"></h2>
+                        <p th:text="${pet.especie + ' • ' + pet.raca}"></p>
+                    </div>
+
+                    <span class="status-pet" th:classappend="${pet.status.name() == 'ATIVO'} ? ' status-ativo' : ' status-inativo'" th:text="${pet.status}"></span>
+                </div>
+
+                <div class="pet-card-info">
+                    <span>
+                        <strong>Idade</strong>
+                        <span th:text="${pet.calcularIdade() + ' anos'}"></span>
                     </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+                    <span>
+                        <strong>Porte</strong>
+                        <span th:text="${pet.porte}"></span>
+                    </span>
+                </div>
+
+                <div class="pet-card-acoes">
+                    <a th:href="@{/pet/detalhes/{id}(id=${pet.id})}"class="botao botao-principal botao-card">
+                        Ver detalhes
+                    </a>
+
+                    <a th:if="${tutor and pet.status.name() == 'ATIVO'}"th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}" class="botao-icone" title="Editar foto">
+                        <span>📷</span>
+                    </a>
+                </div>
+
+            </div>
+        </article>
+
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
 </body>

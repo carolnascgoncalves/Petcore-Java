@@ -1,50 +1,188 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos :: cabecalho('Detalhes do Pet - PetCore')}"></head>
+<head th:replace="~{fragmentos :: cabecalho('Detalhes do pet - PetCore')}"></head>
 
 <body>
-<div class="container">
-    <div th:replace="~{fragmentos :: menu}"></div>
 
-    <h1>Detalhes do Pet</h1>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <p><strong>Nome:</strong> <span th:text="${pet.nome}"></span></p>
-    <p><strong>Espécie:</strong> <span th:text="${pet.especie}"></span></p>
-    <p><strong>Raça:</strong> <span th:text="${pet.raca}"></span></p>
-    <p><strong>Data de nascimento:</strong> <span th:text="${pet.dataNascimento}"></span></p>
-    <p><strong>Idade:</strong> <span th:text="${pet.calcularIdade()}"></span></p>
-    <p><strong>Pelagem:</strong> <span th:text="${pet.pelagem}"></span></p>
-    <p><strong>Porte:</strong> <span th:text="${pet.porte}"></span></p>
-    <p><strong>Sexo:</strong> <span th:text="${pet.sexo}"></span></p>
-    <p><strong>Status:</strong> <span th:text="${pet.status}"></span></p>
-    <p><strong>Imagem:</strong> <span th:text="${pet.urlImg}"></span></p>
-    <p><strong>Histórico:</strong> <a th:if="${pet.historico != null}" th:href="@{/historico/detalhes/{id}(id=${pet.historico.id})}">Ver histórico</a><span th:if="${pet.historico == null}">Sem histórico</span></p>
+<main class="pagina">
 
-    <h3>Exames agendados</h3>
-    <p th:if="${#lists.isEmpty(examesAgendados)}">Nenhum exame agendado.</p>
-    <ul th:unless="${#lists.isEmpty(examesAgendados)}">
-        <li th:each="exame : ${examesAgendados}">
-            <a th:href="@{/exame/detalhes/{id}(id=${exame.id})}" th:text="${exame.nome}"></a>
-            <span th:text="${' - ' + exame.dataFormatada}"></span>
-        </li>
-    </ul>
+    <div class="pagina-cabecalho">
+        <div>
+            <span class="pagina-etiqueta">PERFIL DO PET</span>
+            <h1>Informações do pet</h1>
+            <p>Consulte os dados e acompanhe os cuidados.</p>
+        </div>
 
-    <h3>Receitas ativas</h3>
-    <p th:if="${#lists.isEmpty(receitasAtivas)}">Nenhuma receita ativa.</p>
-    <ul th:unless="${#lists.isEmpty(receitasAtivas)}">
-        <li th:each="receita : ${receitasAtivas}">
-            <a th:href="@{/receita/detalhes/{id}(id=${receita.id})}" th:text="${receita.nome}"></a>
-            <span th:text="${' - validade: ' + receita.validade}"></span>
-        </li>
-    </ul>
+        <a th:href="@{/pet/listar}" class="botao botao-secundario">← Voltar</a>
+    </div>
 
-    <span th:if="${tutor and pet.status.name() == 'ATIVO'}">
-        <a th:href="@{/pet/editar/status/{id}(id=${pet.id})}">Alterar status</a> |
-        <a th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}">Editar imagem</a> |
-    </span>
-    <a th:href="@{/pet/listar}">Voltar</a>
-</div>
+    <section class="perfil-pet">
+
+        <div class="perfil-pet-capa">
+
+            <div class="perfil-pet-foto">
+                <img th:if="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                     th:src="${pet.urlImg}" th:alt="${'Foto de ' + pet.nome}">
+
+                <div th:unless="${pet.urlImg != null and !pet.urlImg.isEmpty()}"
+                     class="foto-placeholder">🐾</div>
+            </div>
+
+            <div class="perfil-pet-titulo">
+                <span class="pagina-etiqueta">PETCORE</span>
+                <h2 th:text="${pet.nome}"></h2>
+                <p th:text="${pet.especie + ' • ' + pet.raca}"></p>
+
+                <span class="status-pet"
+                      th:classappend="${pet.status.name() == 'ATIVO'} ? ' status-ativo' : ' status-inativo'"
+                      th:text="${pet.status}">
+                </span>
+            </div>
+
+            <a th:if="${tutor and pet.status.name() == 'ATIVO'}"
+               th:href="@{/pet/editar/imagem/{id}(id=${pet.id})}"
+               class="botao botao-secundario">
+                📷 Alterar foto
+            </a>
+
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Data de nascimento</span>
+                <strong th:text="${#temporals.format(pet.dataNascimento, 'dd/MM/yyyy')}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Idade</span>
+                <strong th:text="${pet.calcularIdade() + ' anos'}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Sexo</span>
+                <strong th:text="${pet.sexo}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Porte</span>
+                <strong th:text="${pet.porte}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Pelagem</span>
+                <strong th:text="${pet.pelagem}"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Raça</span>
+                <strong th:text="${pet.raca}"></strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="recursos-pet">
+
+        <div class="secao-titulo">
+            <div>
+                <h2>Acompanhamento</h2>
+                <p>Acesse os registros relacionados a este pet.</p>
+            </div>
+        </div>
+
+        <div class="recursos-grid">
+
+            <a th:if="${pet.historico != null}"
+               th:href="@{/historico/detalhes/{id}(id=${pet.historico.id})}"
+               class="recurso-card">
+                <span class="recurso-icone">📋</span>
+                <span>
+                    <strong>Histórico</strong>
+                    <small>Consultar histórico de saúde</small>
+                </span>
+                <span class="recurso-seta">→</span>
+            </a>
+
+            <div th:unless="${pet.historico != null}" class="recurso-card recurso-desabilitado">
+                <span class="recurso-icone">📋</span>
+                <span>
+                    <strong>Histórico</strong>
+                    <small>Sem histórico cadastrado</small>
+                </span>
+            </div>
+
+            <div class="recurso-card">
+                <span class="recurso-icone">🩺</span>
+                <span>
+                    <strong>Exames agendados</strong>
+                    <small th:text="${#lists.size(examesAgendados) + ' exame(s)'}"></small>
+                </span>
+                <span class="recurso-seta">↓</span>
+            </div>
+
+            <div class="recurso-card">
+                <span class="recurso-icone">💊</span>
+                <span>
+                    <strong>Receitas ativas</strong>
+                    <small th:text="${#lists.size(receitasAtivas) + ' receita(s)'}"></small>
+                </span>
+                <span class="recurso-seta">↓</span>
+            </div>
+
+        </div>
+
+        <div class="listas-relacionadas">
+
+            <div class="lista-relacionada">
+                <h3>Exames agendados</h3>
+
+                <p class="texto-secundario" th:if="${#lists.isEmpty(examesAgendados)}">
+                    Nenhum exame agendado.
+                </p>
+
+                <a class="linha-relacionada"
+                   th:each="exame : ${examesAgendados}"
+                   th:href="@{/exame/detalhes/{id}(id=${exame.id})}">
+                    <span th:text="${exame.nome}"></span>
+                    <span th:text="${exame.dataFormatada}"></span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="lista-relacionada">
+                <h3>Receitas ativas</h3>
+
+                <p class="texto-secundario" th:if="${#lists.isEmpty(receitasAtivas)}">
+                    Nenhuma receita ativa.
+                </p>
+
+                <a class="linha-relacionada"
+                   th:each="receita : ${receitasAtivas}"
+                   th:href="@{/receita/detalhes/{id}(id=${receita.id})}">
+                    <span th:text="${receita.nome}"></span>
+                    <span th:text="${'Validade: ' + receita.validade}"></span>
+                    <span>→</span>
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <div class="formulario-acoes">
+        <a th:if="${tutor and pet.status.name() == 'ATIVO'}"
+           th:href="@{/pet/editar/status/{id}(id=${pet.id})}"
+           class="botao botao-secundario">Alterar status</a>
+
+        <a th:href="@{/pet/listar}" class="botao botao-principal">Voltar para pets</a>
+    </div>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
 </body>

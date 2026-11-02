@@ -22,6 +22,7 @@ public class SegurancaConfig {
 				.requestMatchers("/exame/novo","/exame/cadastrar","/exame/editar/**","/exame/atualizar/**","/exame/remover/**").hasAuthority("ROLE_MEDICO")
 				.requestMatchers("/receita/nova","/receita/cadastrar","/receita/remover/**","/historico/remover/**").hasAuthority("ROLE_MEDICO")
 				.requestMatchers("/pet/listar","/pet/detalhes/**","/historico/listar","/historico/detalhes/**","/exame/listar","/exame/detalhes/**","/receita/listar","/receita/detalhes/**").hasAnyAuthority("ROLE_TUTOR","ROLE_MEDICO")
+				.requestMatchers("/img/**", "/css/**", "/uploads/**", "/h2-console/**").permitAll()
 				.anyRequest().authenticated())
 				
 		//Configurações necessárias para acesso ao console do Banco H2 em qualquer navegador

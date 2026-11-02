@@ -1,39 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos :: cabecalho('Home - PetCore')}"></head>
+<head th:replace="~{fragmentos :: cabecalho('Início - PetCore')}"></head>
 
 <body>
 
-<div class="container">
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <div th:replace="~{fragmentos :: menu}"></div>
+<main class="pagina">
 
-    <h1>PetCore</h1>
+    <section class="boas-vindas">
+        <div>
+            <span class="pagina-etiqueta">BEM-VINDO AO PETCORE</span>
+            <h1>Cuidado e carinho em cada detalhe. 💜</h1>
+            <p>Gerencie informações, acompanhe a saúde e organize os cuidados dos seus pacientes.</p>
+        </div>
 
-    <ul class="home-opcoes" th:if="${tutor}">
-        <li><a th:href="@{/tutor/minha-conta}">Minha conta</a></li>
-        <li><a th:href="@{/pet/listar}">Pets</a></li>
-        <li><a th:href="@{/historico/listar}">Históricos</a></li>
-        <li><a th:href="@{/exame/listar}">Exames</a></li>
-        <li><a th:href="@{/receita/listar}">Receitas</a></li>
-    </ul>
+        <div class="boas-vindas-icone">🐾</div>
+    </section>
 
-    <ul class="home-opcoes" th:if="${medico}">
-        <li><a th:href="@{/medico/minha-conta}">Minha conta</a></li>
-        <li><a th:href="@{/pet/listar}">Pets</a></li>
-        <li><a th:href="@{/clinica/listar}">Clínicas</a></li>
-        <li><a th:href="@{/medicamento/listar}">Medicamentos</a></li>
-        <li><a th:href="@{/historico/listar}">Históricos</a></li>
-        <li><a th:href="@{/exame/listar}">Exames</a></li>
-        <li><a th:href="@{/prontuario/listar}">Prontuários</a></li>
-        <li><a th:href="@{/receita/listar}">Receitas</a></li>
-        <li><a th:href="@{/relatorio/listar}">Relatórios</a></li>
-    </ul>
+    <section class="home-secao">
+        <div class="secao-titulo">
+            <div>
+                <h2>Acesso rápido</h2>
+                <p>Escolha uma área para continuar.</p>
+            </div>
+        </div>
 
-</div>
+        <ul class="home-opcoes" th:if="${tutor}">
+            <li><a th:href="@{/tutor/minha-conta}"><span>👤</span> Minha conta</a></li>
+            <li><a th:href="@{/pet/listar}"><span>🐾</span> Meus pets</a></li>
+            <li><a th:href="@{/historico/listar}"><span>📋</span> Históricos</a></li>
+            <li><a th:href="@{/exame/listar}"><span>🩺</span> Exames</a></li>
+            <li><a th:href="@{/receita/listar}"><span>💊</span> Receitas</a></li>
+        </ul>
+
+        <ul class="home-opcoes" th:if="${medico}">
+            <li><a th:href="@{/medico/minha-conta}"><span>👤</span> Minha conta</a></li>
+            <li><a th:href="@{/pet/listar}"><span>🐾</span> Pets</a></li>
+            <li><a th:href="@{/clinica/listar}"><span>🏥</span> Clínicas</a></li>
+            <li><a th:href="@{/medicamento/listar}"><span>💊</span> Medicamentos</a></li>
+            <li><a th:href="@{/historico/listar}"><span>📋</span> Históricos</a></li>
+            <li><a th:href="@{/exame/listar}"><span>🩺</span> Exames</a></li>
+            <li><a th:href="@{/prontuario/listar}"><span>📄</span> Prontuários</a></li>
+            <li><a th:href="@{/receita/listar}"><span>💉</span> Receitas</a></li>
+            <li><a th:href="@{/relatorio/listar}"><span>📊</span> Relatórios</a></li>
+        </ul>
+    </section>
+
+</main>
 
 <script th:replace="~{fragmentos :: bootstrap-script}"></script>
-
 </body>
 </html>
