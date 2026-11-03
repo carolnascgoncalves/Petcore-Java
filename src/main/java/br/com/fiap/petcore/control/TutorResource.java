@@ -45,7 +45,7 @@ public class TutorResource {
 
     @GetMapping("/tutor/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/tutor/novo");
+        ModelAndView mv = new ModelAndView("tutor/novo");
         mv.addObject("tutor", new TutorCreateRequest());
         return mv;
     }
@@ -69,7 +69,7 @@ public class TutorResource {
             bd.rejectValue("email","email.duplicado","Já existe um usuário cadastrado com este email.");
         }
 
-        if (bd.hasErrors()) return new ModelAndView("/tutor/novo");
+        if (bd.hasErrors()) return new ModelAndView("tutor/novo");
 
         tutorService.create(TutorCreateRequest.toEntity(tutorRequest));
         return new ModelAndView("redirect:/login?cadastro=true");
@@ -79,7 +79,7 @@ public class TutorResource {
     public ModelAndView minhaConta(Authentication authentication) {
         Optional<Tutor> tutor = tutorService.fetchByEmail(authentication.getName());
         if (tutor.isPresent()) {
-            ModelAndView mv = new ModelAndView("/tutor/detalhes");
+            ModelAndView mv = new ModelAndView("tutor/detalhes");
             mv.addObject("tutor", tutor.get());
             return mv;
         }
@@ -90,7 +90,7 @@ public class TutorResource {
     public ModelAndView retornarPaginaEdicao(Authentication authentication) {
         Optional<Tutor> tutor = tutorService.fetchByEmail(authentication.getName());
         if (tutor.isPresent()) {
-            ModelAndView mv = new ModelAndView("/tutor/edicao");
+            ModelAndView mv = new ModelAndView("tutor/edicao");
             UserDadosRequest dto = UserDadosRequest.toDto(tutor.get());
             dto.setSenha(null);
             mv.addObject("tutor", dto);
@@ -111,7 +111,7 @@ public class TutorResource {
             bd.rejectValue("email","email.duplicado","Já existe um usuário cadastrado com este email.");
         }
 
-        if (bd.hasErrors()) return new ModelAndView("/tutor/edicao");
+        if (bd.hasErrors()) return new ModelAndView("tutor/edicao");
 
         Optional<Tutor> atualizado = tutorService.update(atual.get().getId(), UserDadosRequest.toEntity(dadosDto));
         if (atualizado.isPresent()) {
@@ -128,7 +128,7 @@ public class TutorResource {
         if (tutor.isPresent() && tutor.get().getPets() != null) {
             var petsAtivos = tutor.get().getPets().stream().filter(pet -> pet.getStatus() == StatusEnum.ATIVO).toList();
             if (!petsAtivos.isEmpty()) {
-                ModelAndView mv = new ModelAndView("/tutor/detalhes");
+                ModelAndView mv = new ModelAndView("tutor/detalhes");
                 mv.addObject("tutor", tutor.get());
                 mv.addObject("erroExclusao", "Não é possível apagar a conta enquanto houver pets ativos. Inative primeiro: " + petsAtivos.stream().map(pet -> pet.getNome()).collect(Collectors.joining(", ")));
                 return mv;
@@ -148,7 +148,7 @@ public class TutorResource {
             return new ModelAndView("redirect:/home");
         }
 
-        ModelAndView mv = new ModelAndView("/tutor/edicao_imagem");
+        ModelAndView mv = new ModelAndView("tutor/edicao_imagem");
         mv.addObject("tutor", tutor.get());
 
         return mv;
