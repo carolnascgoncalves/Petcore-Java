@@ -9,6 +9,6 @@ public class AcessoNegadoController {
 
     @GetMapping("/acesso_negado")
     public ModelAndView exibirPaginaAcessoNegado() {
-        return new ModelAndView("/acesso_negado");
+        return new ModelAndView("acesso_negado");
     }
 }

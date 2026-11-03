@@ -48,7 +48,7 @@ public class ReceitaResource {
 
     @GetMapping("/receita/listar")
     public ModelAndView listarReceitas(Authentication authentication) {
-        ModelAndView mv = new ModelAndView("/receita/listar");
+        ModelAndView mv = new ModelAndView("receita/listar");
         boolean medico = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO"));
         if (medico) {
             mv.addObject("receitas", receitaService.fetchAll(Pageable.unpaged()).getContent());
@@ -69,7 +69,7 @@ public class ReceitaResource {
 
     @GetMapping("/receita/nova")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/receita/nova");
+        ModelAndView mv = new ModelAndView("receita/nova");
         mv.addObject("receita", new ReceitaRequest());
         mv.addObject("medicamentosDisponiveis", medicamentoService.fetchAll(Pageable.unpaged()).getContent());
         mv.addObject("petsAtivos", petService.fetchAll(Pageable.unpaged()).getContent().stream().filter(pet -> pet.getStatus() == StatusEnum.ATIVO).toList());
@@ -122,7 +122,7 @@ public class ReceitaResource {
         if (medico.isEmpty()) bd.reject("medico.invalido", "Médico não encontrado.");
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/receita/nova");
+            ModelAndView mv = new ModelAndView("receita/nova");
             mv.addObject("medicamentosDisponiveis", medicamentosDisponiveis);
             mv.addObject("petsAtivos", petService.fetchAll(Pageable.unpaged()).getContent().stream().filter(pet -> pet.getStatus() == StatusEnum.ATIVO).toList());
 
@@ -148,7 +148,7 @@ public class ReceitaResource {
         }
 
         if (op.isPresent() && !op.get().isRemovida()) {
-            ModelAndView mv = new ModelAndView("/receita/detalhes");
+            ModelAndView mv = new ModelAndView("receita/detalhes");
             mv.addObject("receita", op.get());
             mv.addObject("medico", authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO")));
 

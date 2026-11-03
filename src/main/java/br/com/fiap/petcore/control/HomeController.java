@@ -10,7 +10,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public ModelAndView home(Authentication authentication) {
-        ModelAndView mv = new ModelAndView("/home/index");
+        ModelAndView mv = new ModelAndView("home/index");
         mv.addObject("tutor", authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_TUTOR")));
         mv.addObject("medico", authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO")));
 

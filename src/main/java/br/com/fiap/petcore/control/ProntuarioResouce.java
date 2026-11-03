@@ -46,7 +46,7 @@ public class ProntuarioResouce {
 
     @GetMapping("/prontuario/listar")
     public ModelAndView listarProntuarios() {
-        ModelAndView mv = new ModelAndView("/prontuario/listar");
+        ModelAndView mv = new ModelAndView("prontuario/listar");
         mv.addObject("prontuarios", prontuarioService.fetchAll(Pageable.unpaged()).getContent());
 
         return mv;
@@ -54,7 +54,7 @@ public class ProntuarioResouce {
 
     @GetMapping("/prontuario/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/prontuario/novo");
+        ModelAndView mv = new ModelAndView("prontuario/novo");
         mv.addObject("prontuario", new ProntuarioRequest());
         mv.addObject("historicosDisponiveis", historicoService.fetchAll(Pageable.unpaged()).getContent().stream().filter(h -> h.getPet() != null && h.getPet().getStatus() == StatusEnum.ATIVO).toList());
         mv.addObject("examesDisponiveis", exameService.fetchAll(Pageable.unpaged()).getContent().stream().filter(exame -> !exame.isRemovido() && exame.getPet() != null && exame.getPet().getStatus() == StatusEnum.ATIVO).toList());
@@ -96,7 +96,7 @@ public class ProntuarioResouce {
         if (medico.isEmpty()) bd.reject("medico.invalido", "Médico não encontrado.");
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/prontuario/novo");
+            ModelAndView mv = new ModelAndView("prontuario/novo");
             mv.addObject("historicosDisponiveis", historicoService.fetchAll(Pageable.unpaged()).getContent().stream().filter(h -> h.getPet() != null && h.getPet().getStatus() == StatusEnum.ATIVO).toList());
             mv.addObject("examesDisponiveis", exameService.fetchAll(Pageable.unpaged()).getContent().stream().filter(exame -> !exame.isRemovido() && exame.getPet() != null && exame.getPet().getStatus() == StatusEnum.ATIVO).toList());
             mv.addObject("receitasDisponiveis", receitaService.fetchAll(Pageable.unpaged()).getContent().stream().filter(receita -> !receita.isRemovida() && receita.getPet() != null && receita.getPet().getStatus() == StatusEnum.ATIVO).toList());
@@ -115,7 +115,7 @@ public class ProntuarioResouce {
         Optional<Prontuario> op = prontuarioService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/prontuario/detalhes");
+            ModelAndView mv = new ModelAndView("prontuario/detalhes");
             mv.addObject("prontuario", op.get());
 
             return mv;
@@ -130,7 +130,7 @@ public class ProntuarioResouce {
 
         if (op.isPresent()) {
             if (op.get().getHistorico() != null && op.get().getHistorico().getPet() != null && op.get().getHistorico().getPet().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/prontuario/detalhes/" + id);
-            ModelAndView mv = new ModelAndView("/prontuario/edicao");
+            ModelAndView mv = new ModelAndView("prontuario/edicao");
             mv.addObject("prontuario", ProntuarioDadosRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -145,7 +145,7 @@ public class ProntuarioResouce {
         Optional<Prontuario> prontuarioAtual = prontuarioService.fetchById(id);
         if (prontuarioAtual.isEmpty() || (prontuarioAtual.get().getHistorico() != null && prontuarioAtual.get().getHistorico().getPet() != null && prontuarioAtual.get().getHistorico().getPet().getStatus() == StatusEnum.INATIVO)) return new ModelAndView("redirect:/prontuario/listar");
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/prontuario/edicao");
+            ModelAndView mv = new ModelAndView("prontuario/edicao");
             mv.addObject("id", id);
 
             return mv;
@@ -167,7 +167,7 @@ public class ProntuarioResouce {
             if (prontuario.get().getReceitas() != null) prontuario.get().getReceitas().stream().filter(receita -> !receita.isRemovida()).forEach(receita -> associados.add("Receita — " + receita.getNome()));
 
             if (!associados.isEmpty()) {
-                ModelAndView mv = new ModelAndView("/prontuario/listar");
+                ModelAndView mv = new ModelAndView("prontuario/listar");
                 mv.addObject("prontuarios", prontuarioService.fetchAll(Pageable.unpaged()).getContent());
                 mv.addObject("erroExclusao", "Não é possível excluir este prontuário, pois existem registros associados a ele: " + String.join(", ", associados));
                 return mv;

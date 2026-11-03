@@ -27,7 +27,7 @@ public class MedicamentoResource {
 
     @GetMapping("/medicamento/listar")
     public ModelAndView listarMedicamentos() {
-        ModelAndView mv = new ModelAndView("/medicamento/listar");
+        ModelAndView mv = new ModelAndView("medicamento/listar");
         mv.addObject("medicamentos", medicamentoService.fetchAll(Pageable.unpaged()).getContent());
 
         return mv;
@@ -35,7 +35,7 @@ public class MedicamentoResource {
 
     @GetMapping("/medicamento/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/medicamento/novo");
+        ModelAndView mv = new ModelAndView("medicamento/novo");
         mv.addObject("medicamento", new MedicamentoRequest());
 
         return mv;
@@ -44,7 +44,7 @@ public class MedicamentoResource {
     @PostMapping("/medicamento/cadastrar")
     public ModelAndView cadastrarMedicamento(@Valid @ModelAttribute("medicamento") MedicamentoRequest medicamentoRequest,BindingResult bd) {
         if (bd.hasErrors()) {
-            return new ModelAndView("/medicamento/novo");
+            return new ModelAndView("medicamento/novo");
         }
 
         Medicamento medicamento = MedicamentoRequest.toEntity(medicamentoRequest);
@@ -58,7 +58,7 @@ public class MedicamentoResource {
         Optional<Medicamento> op = medicamentoService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/medicamento/detalhes");
+            ModelAndView mv = new ModelAndView("medicamento/detalhes");
             mv.addObject("medicamento", op.get());
 
             return mv;
@@ -72,7 +72,7 @@ public class MedicamentoResource {
         Optional<Medicamento> op = medicamentoService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/medicamento/edicao");
+            ModelAndView mv = new ModelAndView("medicamento/edicao");
             mv.addObject("medicamento", MedicamentoDadosRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -85,7 +85,7 @@ public class MedicamentoResource {
     @PostMapping("/medicamento/atualizar/{id}")
     public ModelAndView atualizarMedicamento(@PathVariable Long id,@Valid @ModelAttribute("medicamento") MedicamentoDadosRequest dadosDto,BindingResult bd) {
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/medicamento/edicao");
+            ModelAndView mv = new ModelAndView("medicamento/edicao");
             mv.addObject("id", id);
 
             return mv;
@@ -101,7 +101,7 @@ public class MedicamentoResource {
         Optional<Medicamento> medicamento = medicamentoService.fetchById(id);
 
         if (medicamento.isPresent() && medicamento.get().getReceitas() != null && !medicamento.get().getReceitas().isEmpty()) {
-            ModelAndView mv = new ModelAndView("/medicamento/listar");
+            ModelAndView mv = new ModelAndView("medicamento/listar");
             mv.addObject("medicamentos", medicamentoService.fetchAll(Pageable.unpaged()).getContent());
             mv.addObject("erroExclusao", "Não é possível excluir este medicamento, pois ele está associado às seguintes receitas: " + medicamento.get().getReceitas().stream().map(receita -> "Receita — " + receita.getNome()).collect(Collectors.joining(", ")));
             return mv;

@@ -37,7 +37,7 @@ public class RelatorioResouce {
 
     @GetMapping("/relatorio/listar")
     public ModelAndView listarRelatorios() {
-        ModelAndView mv = new ModelAndView("/relatorio/listar");
+        ModelAndView mv = new ModelAndView("relatorio/listar");
         mv.addObject("relatorios", relatorioService.fetchAll(Pageable.unpaged()).getContent());
 
         return mv;
@@ -45,7 +45,7 @@ public class RelatorioResouce {
 
     @GetMapping("/relatorio/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/relatorio/novo");
+        ModelAndView mv = new ModelAndView("relatorio/novo");
         mv.addObject("relatorio", new RelatorioRequest());
         mv.addObject("historicosDisponiveis", historicoService.fetchAll(Pageable.unpaged()).getContent().stream().filter(h -> h.getPet() != null && h.getPet().getStatus() == StatusEnum.ATIVO).toList());
 
@@ -67,7 +67,7 @@ public class RelatorioResouce {
         if (medico.isEmpty()) bd.reject("medico.invalido", "Médico não encontrado.");
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/relatorio/novo");
+            ModelAndView mv = new ModelAndView("relatorio/novo");
             mv.addObject("historicosDisponiveis", historicoService.fetchAll(Pageable.unpaged()).getContent().stream().filter(h -> h.getPet() != null && h.getPet().getStatus() == StatusEnum.ATIVO).toList());
             return mv;
         }
@@ -84,7 +84,7 @@ public class RelatorioResouce {
         Optional<Relatorio> op = relatorioService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/relatorio/detalhes");
+            ModelAndView mv = new ModelAndView("relatorio/detalhes");
             mv.addObject("relatorio", op.get());
 
             return mv;
@@ -99,7 +99,7 @@ public class RelatorioResouce {
 
         if (op.isPresent()) {
             if (op.get().getHistorico() != null && op.get().getHistorico().getPet() != null && op.get().getHistorico().getPet().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/relatorio/detalhes/" + id);
-            ModelAndView mv = new ModelAndView("/relatorio/edicao");
+            ModelAndView mv = new ModelAndView("relatorio/edicao");
             mv.addObject("relatorio", RelatorioDadosRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -114,7 +114,7 @@ public class RelatorioResouce {
         Optional<Relatorio> relatorioAtual = relatorioService.fetchById(id);
         if (relatorioAtual.isEmpty() || (relatorioAtual.get().getHistorico() != null && relatorioAtual.get().getHistorico().getPet() != null && relatorioAtual.get().getHistorico().getPet().getStatus() == StatusEnum.INATIVO)) return new ModelAndView("redirect:/relatorio/listar");
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/relatorio/edicao");
+            ModelAndView mv = new ModelAndView("relatorio/edicao");
             mv.addObject("id", id);
 
             return mv;
@@ -132,7 +132,7 @@ public class RelatorioResouce {
         if (relatorio.isPresent() && relatorio.get().getHistorico() != null && relatorio.get().getHistorico().getPet() != null && relatorio.get().getHistorico().getPet().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/relatorio/listar");
 
         if (relatorio.isPresent() && relatorio.get().getClinicas() != null && !relatorio.get().getClinicas().isEmpty()) {
-            ModelAndView mv = new ModelAndView("/relatorio/listar");
+            ModelAndView mv = new ModelAndView("relatorio/listar");
             mv.addObject("relatorios", relatorioService.fetchAll(Pageable.unpaged()).getContent());
             mv.addObject("erroExclusao", "Não é possível excluir este relatório, pois ele está associado às seguintes clínicas: " + relatorio.get().getClinicas().stream().map(clinica -> "Clínica — " + clinica.getNome()).collect(Collectors.joining(", ")));
             return mv;

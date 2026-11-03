@@ -44,7 +44,7 @@ public class ExameResouce {
 
     @GetMapping("/exame/listar")
     public ModelAndView listarExames(Authentication authentication) {
-        ModelAndView mv = new ModelAndView("/exame/listar");
+        ModelAndView mv = new ModelAndView("exame/listar");
         boolean medico = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO"));
         if (medico) {
             mv.addObject("exames", exameService.fetchAll(Pageable.unpaged()).getContent());
@@ -65,7 +65,7 @@ public class ExameResouce {
 
     @GetMapping("/exame/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/exame/novo");
+        ModelAndView mv = new ModelAndView("exame/novo");
         mv.addObject("exame", new ExameRequest());
         mv.addObject("petsAtivos", petService.fetchAll(Pageable.unpaged()).getContent().stream().filter(pet -> pet.getStatus() == StatusEnum.ATIVO).toList());
 
@@ -87,7 +87,7 @@ public class ExameResouce {
         if (medico.isEmpty()) bd.reject("medico.invalido", "Médico não encontrado.");
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/exame/novo");
+            ModelAndView mv = new ModelAndView("exame/novo");
             mv.addObject("petsAtivos", petService.fetchAll(Pageable.unpaged()).getContent().stream().filter(pet -> pet.getStatus() == StatusEnum.ATIVO).toList());
             return mv;
         }
@@ -109,9 +109,10 @@ public class ExameResouce {
             boolean pertence = tutorLogado.isPresent() && op.get().getPet() != null && tutorLogado.get().getPets().stream().anyMatch(pet -> pet.getId().equals(op.get().getPet().getId()));
             if (!pertence) return new ModelAndView("redirect:/exame/listar");
         }
+     
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/exame/detalhes");
+            ModelAndView mv = new ModelAndView("exame/detalhes");
             mv.addObject("exame", op.get());
             mv.addObject("medico", authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO")));
 
@@ -127,7 +128,7 @@ public class ExameResouce {
 
         if (op.isPresent()) {
             if (op.get().getPet() != null && op.get().getPet().getStatus() == StatusEnum.INATIVO) return new ModelAndView("redirect:/exame/detalhes/" + id);
-            ModelAndView mv = new ModelAndView("/exame/edicao");
+            ModelAndView mv = new ModelAndView("exame/edicao");
             mv.addObject("exame", ExameDadosRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -146,7 +147,7 @@ public class ExameResouce {
         }
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/exame/edicao");
+            ModelAndView mv = new ModelAndView("exame/edicao");
             mv.addObject("id", id);
 
             return mv;

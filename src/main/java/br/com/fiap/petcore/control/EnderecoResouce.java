@@ -25,7 +25,7 @@ public class EnderecoResouce {
 
     @GetMapping("/endereco/listar")
     public ModelAndView listarEnderecos() {
-        ModelAndView mv = new ModelAndView("/endereco/listar");
+        ModelAndView mv = new ModelAndView("endereco/listar");
         mv.addObject("enderecos", enderecoService.fetchAll(Pageable.unpaged()).getContent());
 
         return mv;
@@ -33,7 +33,7 @@ public class EnderecoResouce {
 
     @GetMapping("/endereco/novo")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/endereco/novo");
+        ModelAndView mv = new ModelAndView("endereco/novo");
         mv.addObject("endereco", new EnderecoRequest());
 
         return mv;
@@ -42,7 +42,7 @@ public class EnderecoResouce {
     @PostMapping("/endereco/cadastrar")
     public ModelAndView cadastrarEndereco(@Valid @ModelAttribute("endereco") EnderecoRequest enderecoRequest,BindingResult bd) {
         if (bd.hasErrors()) {
-            return new ModelAndView("/endereco/novo");
+            return new ModelAndView("endereco/novo");
         }
 
         Endereco endereco = EnderecoRequest.toEntity(enderecoRequest);
@@ -56,7 +56,7 @@ public class EnderecoResouce {
         Optional<Endereco> op = enderecoService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/endereco/detalhes");
+            ModelAndView mv = new ModelAndView("endereco/detalhes");
             mv.addObject("endereco", op.get());
 
             return mv;
@@ -70,7 +70,7 @@ public class EnderecoResouce {
         Optional<Endereco> op = enderecoService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/endereco/edicao");
+            ModelAndView mv = new ModelAndView("endereco/edicao");
             mv.addObject("endereco", EnderecoRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -83,7 +83,7 @@ public class EnderecoResouce {
     @PostMapping("/endereco/atualizar/{id}")
     public ModelAndView atualizarEndereco(@PathVariable Long id,@Valid @ModelAttribute("endereco") EnderecoRequest enderecoRequest,BindingResult bd) {
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/endereco/edicao");
+            ModelAndView mv = new ModelAndView("endereco/edicao");
             mv.addObject("id", id);
 
             return mv;
@@ -99,7 +99,7 @@ public class EnderecoResouce {
         Optional<Endereco> endereco = enderecoService.fetchById(id);
 
         if (endereco.isPresent() && endereco.get().getClinica() != null) {
-            ModelAndView mv = new ModelAndView("/endereco/listar");
+            ModelAndView mv = new ModelAndView("endereco/listar");
             mv.addObject("enderecos", enderecoService.fetchAll(Pageable.unpaged()).getContent());
             mv.addObject("erroExclusao", "Não é possível excluir este endereço, pois ele está associado à clínica " + endereco.get().getClinica().getNome());
             return mv;

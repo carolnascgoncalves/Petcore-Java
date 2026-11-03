@@ -32,7 +32,7 @@ public class HistoricoResource {
     
     @GetMapping("/historico/listar")
     public ModelAndView listarHistoricos(Authentication authentication) {
-        ModelAndView mv = new ModelAndView("/historico/listar");
+        ModelAndView mv = new ModelAndView("historico/listar");
         boolean medico = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO"));
         if (medico) {
             mv.addObject("historicos", historicoService.fetchAll(Pageable.unpaged()).getContent());
@@ -58,7 +58,7 @@ public class HistoricoResource {
         }
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/historico/detalhes");
+            ModelAndView mv = new ModelAndView("historico/detalhes");
             Historico historico = op.get();
             LocalDateTime agora = LocalDateTime.now();
             List<Exame> examesRealizados = new ArrayList<>();
@@ -103,7 +103,7 @@ public class HistoricoResource {
             if (historico.get().getRelatorios() != null) historico.get().getRelatorios().forEach(relatorio -> associados.add("Relatório do pet " + (historico.get().getPet() != null ? historico.get().getPet().getNome() : "sem pet")));
 
             if (!associados.isEmpty()) {
-                ModelAndView mv = new ModelAndView("/historico/listar");
+                ModelAndView mv = new ModelAndView("historico/listar");
                 mv.addObject("historicos", historicoService.fetchAll(Pageable.unpaged()).getContent());
                 mv.addObject("erroExclusao", "Não é possível excluir este histórico, pois existem registros associados a ele: " + String.join(", ", associados));
                 return mv;

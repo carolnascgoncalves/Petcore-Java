@@ -27,7 +27,7 @@ public class ClinicaResouce {
 
     @GetMapping("/clinica/listar")
     public ModelAndView listarClinicas() {
-        ModelAndView mv = new ModelAndView("/clinica/listar");
+        ModelAndView mv = new ModelAndView("clinica/listar");
         mv.addObject("clinicas", clinicaService.fetchAll(Pageable.unpaged()).getContent());
 
         return mv;
@@ -35,7 +35,7 @@ public class ClinicaResouce {
 
     @GetMapping("/clinica/nova")
     public ModelAndView retornarPaginaCadastro() {
-        ModelAndView mv = new ModelAndView("/clinica/nova");
+        ModelAndView mv = new ModelAndView("clinica/nova");
         mv.addObject("clinica", new ClinicaRequest());
 
         return mv;
@@ -45,7 +45,7 @@ public class ClinicaResouce {
     public ModelAndView cadastrar(@Valid @ModelAttribute("clinica") ClinicaRequest clinica,BindingResult bd) {
 
         if (bd.hasErrors()) {
-            return new ModelAndView("/clinica/nova");
+            return new ModelAndView("clinica/nova");
         }
 
         Clinica novaClinica = ClinicaRequest.toEntity(clinica);
@@ -59,7 +59,7 @@ public class ClinicaResouce {
         Optional<Clinica> op = clinicaService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/clinica/detalhes");
+            ModelAndView mv = new ModelAndView("clinica/detalhes");
             mv.addObject("clinica", op.get());
 
             return mv;
@@ -73,7 +73,7 @@ public class ClinicaResouce {
         Optional<Clinica> op = clinicaService.fetchById(id);
 
         if (op.isPresent()) {
-            ModelAndView mv = new ModelAndView("/clinica/edicao");
+            ModelAndView mv = new ModelAndView("clinica/edicao");
             mv.addObject("clinica", ClinicaDadosRequest.toDto(op.get()));
             mv.addObject("id", id);
 
@@ -87,7 +87,7 @@ public class ClinicaResouce {
     public ModelAndView atualizarClinica(@PathVariable Long id,@Valid @ModelAttribute("clinica") ClinicaDadosRequest dadosDto,BindingResult bd) {
 
         if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/clinica/edicao");
+            ModelAndView mv = new ModelAndView("clinica/edicao");
             mv.addObject("id", id);
 
             return mv;
@@ -103,7 +103,7 @@ public class ClinicaResouce {
         Optional<Clinica> clinica = clinicaService.fetchById(id);
 
         if (clinica.isPresent() && clinica.get().getRelatorios() != null && !clinica.get().getRelatorios().isEmpty()) {
-            ModelAndView mv = new ModelAndView("/clinica/listar");
+            ModelAndView mv = new ModelAndView("clinica/listar");
             mv.addObject("clinicas", clinicaService.fetchAll(Pageable.unpaged()).getContent());
             mv.addObject("erroExclusao", "Não é possível excluir esta clínica, pois ela está associada aos seguintes relatórios: " + clinica.get().getRelatorios().stream().map(relatorio -> "Relatório " + relatorio.getId()).collect(Collectors.joining(", ")));
             return mv;
